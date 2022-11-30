@@ -1,18 +1,4 @@
-# -*- coding: utf-8 -*-
-
-#  Licensed under the Apache License, Version 2.0 (the "License"); you may
-#  not use this file except in compliance with the License. You may obtain
-#  a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#  License for the specific language governing permissions and limitations
-#  under the License.
-
-
+#line
 import datetime
 import errno
 import json
@@ -47,6 +33,15 @@ from linebot.models import (
     SeparatorComponent, QuickReply, QuickReplyButton,
     ImageSendMessage)
 
+#arduino
+from urllib.request import urlopen
+import json
+import time
+
+#thingspeak
+READ_API_KEY='O0TENR74YMQ8ORIT'
+CHANNEL_ID='1886703'
+
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 
@@ -62,6 +57,14 @@ handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
+TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
+response = TS.read()
+data=json.loads(response.decode('utf-8'))
+#print(data)
+#print (data["channel"]["field1"],data["feeds"][1]["field1"])
+#print (data["channel"]["field2"],data["feeds"][1]["field2"])
+tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
+hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -104,11 +107,11 @@ def handle_message(event):
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='This is keyword for 溫度!'))
+            TextSendMessage(text=tem_value))
     elif message_text == '濕度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='This is keyword for 濕度!'))
+            TextSendMessage(text=hum_value))
     else:
         line_bot_api.reply_message(
             event.reply_token,
