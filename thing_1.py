@@ -17,8 +17,8 @@ data=json.loads(response.decode('utf-8'))
 
 print(data)
 
-print (data["channel"]["field1"],data["feeds"][1]["field1"])
-print (data["channel"]["field2"],data["feeds"][1]["field2"])
+print (data["channel"]["field1"]+data["feeds"][1]["field1"])
+print (data["channel"]["field2"]+data["feeds"][1]["field2"])
 
 """ 
     a=data["feeds"][1]["field1"]
