@@ -107,11 +107,11 @@ def handle_message(event):
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="1"+tem_value))
+            TextSendMessage(text="tem_value"))
     elif message_text == '濕度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="2"+hum_value))
+            TextSendMessage(text="hum_value"))
     else:
         line_bot_api.reply_message(
             event.reply_token,
