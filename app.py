@@ -57,9 +57,9 @@ handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
-response = TS.read()
-data=json.loads(response.decode('utf-8'))
+#TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
+#response = TS.read()
+#data=json.loads(response.decode('utf-8'))
 #print(data)
 #print (data["channel"]["field1"],data["feeds"][1]["field1"])
 #print (data["channel"]["field2"],data["feeds"][1]["field2"])
@@ -103,6 +103,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
+    TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
+    response = TS.read()
+    data=json.loads(response.decode('utf-8'))
     tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
     hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
 
