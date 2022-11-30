@@ -63,8 +63,8 @@ data=json.loads(response.decode('utf-8'))
 #print(data)
 #print (data["channel"]["field1"],data["feeds"][1]["field1"])
 #print (data["channel"]["field2"],data["feeds"][1]["field2"])
-tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
-hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
+#tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
+#hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -103,15 +103,17 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
+    tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
+    hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
 
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="tem_value"))
+            TextSendMessage(text=tem_value))
     elif message_text == '濕度':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="hum_value"))
+            TextSendMessage(text=hum_value))
     else:
         line_bot_api.reply_message(
             event.reply_token,
