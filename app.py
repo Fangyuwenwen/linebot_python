@@ -106,8 +106,11 @@ def handle_message(event):
     TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
     response = TS.read()
     data=json.loads(response.decode('utf-8'))
-    tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
-    hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
+    #tem_value=data["channel"]["field1"],data["feeds"][1]["field1"]
+    #hum_value=data["channel"]["field2"],data["feeds"][1]["field2"]
+    tem_value="1"
+    hum_value="2"
+
 
     if message_text == '溫度':
         line_bot_api.reply_message(
