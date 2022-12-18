@@ -57,12 +57,10 @@ handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
+#取得溫度和濕度
 TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
 response = TS.read()
 data=json.loads(response.decode('utf-8'))
-#print(data)
-#print (data["channel"]["field1"],data["feeds"][1]["field1"])
-#print (data["channel"]["field2"],data["feeds"][1]["field2"])
 tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
 hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
 
@@ -103,12 +101,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
-    #TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
-    #response = TS.read()
-    #data=json.loads(response.decode('utf-8'))
-    #tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
-    #hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
-
+    flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
@@ -117,6 +110,11 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=hum_value))
+    elif message_text == '圖表':
+        line_bot_api.reply_message(
+            event.reply_token,
+            FlexSendMessage(flexmessage)
+        )
     else:
         line_bot_api.reply_message(
             event.reply_token,

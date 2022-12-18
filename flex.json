@@ -1,0 +1,48 @@
+{
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "uri": "http://linecorp.com/"
+      }
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "溫度變化圖表",
+            "uri": "https://thingspeak.com/channels/1886703/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+          }
+        },
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "濕度變化圖表",
+            "uri": "https://thingspeak.com/channels/1886703/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+          }
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [],
+          "margin": "sm"
+        }
+      ],
+      "flex": 0
+    }
+  }
