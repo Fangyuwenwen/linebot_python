@@ -113,7 +113,7 @@ def handle_message(event):
     elif message_text == '圖表':
         line_bot_api.reply_message(
             event.reply_token,
-            FlexSendMessage(flexmessage)
+            FlexSendMessage(texe=flexmessage)
         )
     else:
         line_bot_api.reply_message(
