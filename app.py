@@ -101,7 +101,6 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
-    flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
@@ -111,9 +110,10 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=hum_value))
     elif message_text == '圖表':
+        flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
         line_bot_api.reply_message(
             event.reply_token,
-            FlexSendMessage(texe=flexmessage)
+            FlexSendMessage('圖表',flexmessage)
         )
     else:
         line_bot_api.reply_message(
