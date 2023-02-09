@@ -8,7 +8,7 @@ READ_API_KEY='O0TENR74YMQ8ORIT'
 CHANNEL_ID='1886703'
 
 
-#while True:
+#while True:#qZ4*G6*hDuDbj4p
 TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
 
 response = TS.read()
