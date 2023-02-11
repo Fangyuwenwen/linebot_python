@@ -1,45 +1,70 @@
-from flask_ngrok import run_with_ngrok
-from flask import Flask, request
-# 載入 LINE Message API 相關函式庫
-from linebot import LineBotApi, WebhookHandler
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
-# 載入 json 標準函式庫，處理回傳的資料格式
-import requests, json, time
+#line
+import datetime
+import errno
+import json
+import os
+import sys
+import tempfile
+from argparse import ArgumentParser
+
+from flask import Flask, request, abort, send_from_directory
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.exceptions import (
+    LineBotApiError, InvalidSignatureError
+)
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+    SourceUser, SourceGroup, SourceRoom,
+    TemplateSendMessage, ConfirmTemplate, MessageAction,
+    ButtonsTemplate, ImageCarouselTemplate, ImageCarouselColumn, URIAction,
+    PostbackAction, DatetimePickerAction,
+    CameraAction, CameraRollAction, LocationAction,
+    CarouselTemplate, CarouselColumn, PostbackEvent,
+    StickerMessage, StickerSendMessage, LocationMessage, LocationSendMessage,
+    ImageMessage, VideoMessage, AudioMessage, FileMessage,
+    UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent,
+    MemberJoinedEvent, MemberLeftEvent,
+    FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
+    TextComponent, IconComponent, ButtonComponent,
+    SeparatorComponent, QuickReply, QuickReplyButton,
+    ImageSendMessage)
+
+#arduino
+from urllib.request import urlopen
+import json
+import time
+
+#thingspeak
+READ_API_KEY='O0TENR74YMQ8ORIT'
+CHANNEL_ID='1886703'
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 
-access_token = '你的 LINE Channel access token'
-channel_secret = '你的 LINE Channel secret'
+# get channel_secret and channel_access_token from your environment variable
+channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+if channel_secret is None or channel_access_token is None:
+    print('Specify LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variables.')
+    sys.exit(1)
 
-@app.route("/", methods=['POST'])
-def linebot():
-    body = request.get_data(as_text=True)    # 取得收到的訊息內容
-    try:
-        line_bot_api = LineBotApi(access_token)               # 確認 token 是否正確
-        handler = WebhookHandler(channel_secret)              # 確認 secret 是否正確
-        signature = request.headers['X-Line-Signature']       # 加入回傳的 headers
-        handler.handle(body, signature)                       # 綁定訊息回傳的相關資訊
-        json_data = json.loads(body)                          # 轉換內容為 json 格式
-        reply_token = json_data['events'][0]['replyToken']    # 取得回傳訊息的 Token ( reply message 使用 )
-        user_id = json_data['events'][0]['source']['userId']  # 取得使用者 ID ( push message 使用 )
-        print(json_data)                                      # 印出內容
-        if 'message' in json_data['events'][0]:               # 如果傳送的是 message
-            if json_data['events'][0]['message']['type'] == 'text':   # 如果 message 的類型是文字 text
-                text = json_data['events'][0]['message']['text']      # 取出文字
-                if text == '雷達回波圖' or text == '雷達回波':           # 如果是雷達回波圖相關的文字
-                    # 傳送雷達回波圖 ( 加上時間戳記 )
-                    reply_image(f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}', reply_token, access_token)
-                else:
-                    reply_message(text, reply_token, access_token)        # 如果是一般文字，直接回覆同樣的文字 
-    except:
-        print('error')                       # 如果發生錯誤，印出 error
-    return 'OK'                              # 驗證 Webhook 使用，不能省略
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
 
-if __name__ == "__main__":
-  run_with_ngrok(app)                        # 串連 ngrok 服務
-  app.run()
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-# LINE 回傳圖片函式
+#取得溫度和濕度
+TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
+response = TS.read()
+data=json.loads(response.decode('utf-8'))
+tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
+hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
+
+#雷達
 def reply_image(msg, rk, token):
     headers = {'Authorization':f'Bearer {token}','Content-Type':'application/json'}    
     body = {
@@ -50,5 +75,82 @@ def reply_image(msg, rk, token):
           'previewImageUrl': msg
         }]
     }
-    req = requests.request('POST', 'https://api.line.me/v2/bot/message/reply', headers=headers,data=json.dumps(body).encode('utf-8'))
-    print(req.text)
+
+# function for create tmp dir for download content
+def make_static_tmp_dir():
+    try:
+        os.makedirs(static_tmp_path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
+            pass
+        else:
+            raise
+
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        handler.handle(body, signature)
+    except LineBotApiError as e:
+        print("Got exception from LINE Messaging API: %s\n" % e.message)
+        for m in e.error.details:
+            print("  %s: %s" % (m.property, m.message))
+        print("\n")
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    message_text = event.message.text
+    if message_text == '溫度':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=tem_value))
+    elif message_text == '濕度':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=hum_value))
+    elif message_text == '圖表':
+        flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
+        line_bot_api.reply_message(
+            event.reply_token,
+            FlexSendMessage('圖表',flexmessage)
+        )
+    elif message_text == '雷達':
+        line_bot_api.reply_image(
+            event.reply_token,
+            f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}'
+        )
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='Please input valid keyword!'))
+
+@app.route('/static/<path:path>')
+def send_static_content(path):
+    return send_from_directory('static', path)
+
+
+if __name__ == "__main__":
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    # create tmp dir for download content
+    make_static_tmp_dir()
+
+    app.run(debug=options.debug, port=options.port)
