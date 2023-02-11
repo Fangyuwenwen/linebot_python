@@ -1,105 +1,54 @@
-# -*- coding: utf-8 -*-
+from flask_ngrok import run_with_ngrok
+from flask import Flask, request
+# 載入 LINE Message API 相關函式庫
+from linebot import LineBotApi, WebhookHandler
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+# 載入 json 標準函式庫，處理回傳的資料格式
+import requests, json, time
 
-#  Licensed under the Apache License, Version 2.0 (the "License"); you may
-#  not use this file except in compliance with the License. You may obtain
-#  a copy of the License at
-#
-#       https://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#  License for the specific language governing permissions and limitations
-#  under the License.
+app = Flask(__name__)
 
-import os
-import sys
-from argparse import ArgumentParser
+access_token = '你的 LINE Channel access token'
+channel_secret = '你的 LINE Channel secret'
 
-import asyncio
-import aiohttp
-from aiohttp import web
-
-import logging
-
-from aiohttp.web_runner import TCPSite
-
-from linebot import (
-    AsyncLineBotApi, WebhookParser
-)
-from linebot.aiohttp_async_http_client import AiohttpAsyncHttpClient
-from linebot.exceptions import (
-    InvalidSignatureError
-)
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-)
-
-# get channel_secret and channel_access_token from your environment variable
-channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
-channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
-if channel_secret is None:
-    print('Specify LINE_CHANNEL_SECRET as environment variable.')
-    sys.exit(1)
-if channel_access_token is None:
-    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
-    sys.exit(1)
-
-
-class Handler:
-    def __init__(self, line_bot_api, parser):
-        self.line_bot_api = line_bot_api
-        self.parser = parser
-
-    async def echo(self, request):
-        signature = request.headers['X-Line-Signature']
-        body = await request.text()
-
-        try:
-            events = self.parser.parse(body, signature)
-        except InvalidSignatureError:
-            return web.Response(status=400, text='Invalid signature')
-
-        for event in events:
-            if not isinstance(event, MessageEvent):
-                continue
-            if not isinstance(event.message, TextMessage):
-                continue
-
-            await self.line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=event.message.text)
-            )
-
-        return web.Response(text="OK\n")
-
-
-async def main(port=8000):
-    session = aiohttp.ClientSession()
-    async_http_client = AiohttpAsyncHttpClient(session)
-    line_bot_api = AsyncLineBotApi(channel_access_token, async_http_client)
-    parser = WebhookParser(channel_secret)
-
-    handler = Handler(line_bot_api, parser)
-
-    app = web.Application()
-    app.add_routes([web.post('/callback', handler.echo)])
-
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = TCPSite(runner=runner, port=port)
-    await site.start()
-    while True:
-        await asyncio.sleep(3600)  # sleep forever
-
+@app.route("/", methods=['POST'])
+def linebot():
+    body = request.get_data(as_text=True)    # 取得收到的訊息內容
+    try:
+        line_bot_api = LineBotApi(access_token)               # 確認 token 是否正確
+        handler = WebhookHandler(channel_secret)              # 確認 secret 是否正確
+        signature = request.headers['X-Line-Signature']       # 加入回傳的 headers
+        handler.handle(body, signature)                       # 綁定訊息回傳的相關資訊
+        json_data = json.loads(body)                          # 轉換內容為 json 格式
+        reply_token = json_data['events'][0]['replyToken']    # 取得回傳訊息的 Token ( reply message 使用 )
+        user_id = json_data['events'][0]['source']['userId']  # 取得使用者 ID ( push message 使用 )
+        print(json_data)                                      # 印出內容
+        if 'message' in json_data['events'][0]:               # 如果傳送的是 message
+            if json_data['events'][0]['message']['type'] == 'text':   # 如果 message 的類型是文字 text
+                text = json_data['events'][0]['message']['text']      # 取出文字
+                if text == '雷達回波圖' or text == '雷達回波':           # 如果是雷達回波圖相關的文字
+                    # 傳送雷達回波圖 ( 加上時間戳記 )
+                    reply_image(f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}', reply_token, access_token)
+                else:
+                    reply_message(text, reply_token, access_token)        # 如果是一般文字，直接回覆同樣的文字 
+    except:
+        print('error')                       # 如果發生錯誤，印出 error
+    return 'OK'                              # 驗證 Webhook 使用，不能省略
 
 if __name__ == "__main__":
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+  run_with_ngrok(app)                        # 串連 ngrok 服務
+  app.run()
 
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    options = arg_parser.parse_args()
-
-    asyncio.run(main(options.port))
+# LINE 回傳圖片函式
+def reply_image(msg, rk, token):
+    headers = {'Authorization':f'Bearer {token}','Content-Type':'application/json'}    
+    body = {
+    'replyToken':rk,
+    'messages':[{
+          'type': 'image',
+          'originalContentUrl': msg,
+          'previewImageUrl': msg
+        }]
+    }
+    req = requests.request('POST', 'https://api.line.me/v2/bot/message/reply', headers=headers,data=json.dumps(body).encode('utf-8'))
+    print(req.text)
