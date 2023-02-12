@@ -132,7 +132,7 @@ def handle_message(event):
     elif message_text == '雷達':
         line_bot_api.reply_image(
             event.reply_token,
-            ImageMessage('雷達',reply_image.req)
+            ImageSendMessage('雷達',reply_image.req)
         )
     else:
         line_bot_api.reply_message(
