@@ -6,7 +6,6 @@ import os
 import sys
 import tempfile
 from argparse import ArgumentParser
-import requests
 
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -65,19 +64,6 @@ data=json.loads(response.decode('utf-8'))
 tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
 hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
 
-# LINE 回傳圖片函式
-def reply_image(msg, rk, token):
-    headers = {'Authorization':f'Bearer {token}','Content-Type':'application/json'}    
-    body = {
-    'replyToken':rk,
-    'messages':[{
-          'type': 'image',
-          'originalContentUrl': msg,
-          'previewImageUrl': msg
-        }]
-    }
-    req = requests.request('POST', 'https://api.line.me/v2/bot/message/reply', headers=headers,data=json.dumps(body).encode('utf-8'))
-
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -129,12 +115,6 @@ def handle_message(event):
             event.reply_token,
             FlexSendMessage('圖表',flexmessage)
         )
-    elif message_text == '雷達':
-        imagemessage=reply_image(f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}')
-        line_bot_api.reply_image(
-            event.reply_token,
-            ImageSendMessage('雷達',imagemessage)
-        )
     else:
         line_bot_api.reply_message(
             event.reply_token,
@@ -157,17 +137,3 @@ if __name__ == "__main__":
     make_static_tmp_dir()
 
     app.run(debug=options.debug, port=options.port)
-
-    # LINE 回傳圖片函式
-def reply_image(msg, rk, token):
-    headers = {'Authorization':f'Bearer {token}','Content-Type':'application/json'}    
-    body = {
-    'replyToken':rk,
-    'messages':[{
-          'type': 'image',
-          'originalContentUrl': msg,
-          'previewImageUrl': msg
-        }]
-    }
-    req = requests.request('POST', 'https://api.line.me/v2/bot/message/reply', headers=headers,data=json.dumps(body).encode('utf-8'))
-    print(req.text)
