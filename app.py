@@ -128,7 +128,7 @@ def handle_message(event):
             event.reply_token,
             FlexSendMessage('圖表',flexmessage)
         )
-    elif message_text == '天氣':
+    elif message_text[:2] == '天氣':
         city = message_text[3:]
         city = city.replace('台','臺')
         if(not (city in cities)):
