@@ -143,7 +143,7 @@ def handle_message(event):
                 template = CarouselTemplate(
                     columns = [
                         CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ex3Opfo.png',
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
                             title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
                             text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
                             actions = [
