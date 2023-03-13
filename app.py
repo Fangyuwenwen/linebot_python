@@ -78,7 +78,7 @@ def get(city):
     return res
 
 # 空氣品質函式
-def aqi(city):
+def city_status(city):
     city_list, site_list ={}, {}
     msg = '找不到空氣品質資訊。'
     try:
@@ -202,7 +202,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text="查詢格式為: 空氣 縣市"))
         else:
-            res = get(city)
+            msg = city_status(city)
             line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
                 alt_text = city + '目前空氣品質',
@@ -211,7 +211,7 @@ def handle_message(event):
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
                             title = '目前空氣品質',
-                            text = "test",
+                            text = msg,
                             actions = [
                                 URIAction(
                                     label = '詳細內容',
