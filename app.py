@@ -78,7 +78,7 @@ def get(city):
     return res
 
 # 空氣品質函式
-def aqi(address):
+def aqi(city):
     city_list, site_list ={}, {}
     msg = '找不到空氣品質資訊。'
     try:
@@ -96,7 +96,7 @@ def aqi(address):
             site_list[site] = {'aqi':aqi, 'status':status}  # 記錄鄉鎮區域空氣品質
             city_list[city].append(aqi)        # 將各個縣市裡的鄉鎮區域空氣 aqi 數值，以串列方式放入縣市名稱的變數裡
         for i in city_list:
-            if i in address: # 如果地址裡包含縣市名稱的 key，就直接使用對應的內容
+            if i in city: # 如果地址裡包含縣市名稱的 key，就直接使用對應的內容
                 # https://airtw.epa.gov.tw/cht/Information/Standard/AirQualityIndicator.aspx
                 aqi_val = round(statistics.mean(city_list[i]),0)  # 計算平均數值，如果找不到鄉鎮區域，就使用縣市的平均值
                 aqi_status = ''  # 手動判斷對應的空氣品質說明文字
@@ -109,7 +109,7 @@ def aqi(address):
                 msg = f'空氣品質{aqi_status} ( AQI {aqi_val} )。' # 定義回傳的訊息
                 break
         for i in site_list:
-            if i in address:  # 如果地址裡包含鄉鎮區域名稱的 key，就直接使用對應的內容
+            if i in city:  # 如果地址裡包含鄉鎮區域名稱的 key，就直接使用對應的內容
                 msg = f'空氣品質{site_list[i]["status"]} ( AQI {site_list[i]["aqi"]} )。'
                 break
         return msg    # 回傳 msg
@@ -202,7 +202,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text="查詢格式為: 空氣 縣市"))
         else:
-            res = get(msg)
+            res = get(city)
             line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
                 alt_text = city + '目前空氣品質',
@@ -211,14 +211,14 @@ def handle_message(event):
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
                             title = '目前空氣品質',
-                            text = res
+                            text = "目前空氣狀況:"+res,
                             actions = [
                                 URIAction(
                                     label = '詳細內容',
                                     uri = 'https://airtw.epa.gov.tw/'
                                 )
                             ]
-                        )for data in res
+                        )
                     ]
                 )
             ))
