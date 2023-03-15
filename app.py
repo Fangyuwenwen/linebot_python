@@ -250,7 +250,7 @@ def handle_message(event):
     elif message_text == '地震':
         msg=earth_quake()
         line_bot_api.push_message(
-            event.reply_token,
+            event.userId,
             TextSendMessage(text=msg[0])
         )
         line_bot_api.reply_message(
