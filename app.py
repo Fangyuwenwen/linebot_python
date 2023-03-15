@@ -1,10 +1,13 @@
-#line
+import requests
+import statistics
+import time
 import datetime
 import errno
 import json
 import os
 import sys
 import tempfile
+from urllib.request import urlopen
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort, send_from_directory
@@ -33,9 +36,7 @@ from linebot.models import (
     SeparatorComponent, QuickReply, QuickReplyButton,
     ImageSendMessage)
 
-#arduino
-from urllib.request import urlopen
-import json,requests,statistics,time
+
 
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
@@ -77,7 +78,7 @@ def get(city):
             res[j].append(i['time'][j])
     return res
 
-# 空氣品質函式
+# 取得空氣品質
 def city_status(city):
     city_list, site_list ={}, {}
     msg = '找不到空氣品質資訊。'
@@ -115,6 +116,9 @@ def city_status(city):
         return msg    # 回傳 msg
     except:
         return msg    # 如果取資料有發生錯誤，直接回傳 msg
+    
+#取得雷達回波圖
+
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -222,10 +226,15 @@ def handle_message(event):
                     ]
                 )
             ))
+    elif message_text == '雷達':
+            line_bot_api.reply_message(
+                event.reply_token,
+                FlexSendMessage('雷達回波圖',f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}', )
+                )
     else:
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='Please input valid keyword!'))
+            TextSendMessage(text='請輸入正確關鍵字'))
 
 @app.route('/static/<path:path>')
 def send_static_content(path):
