@@ -12,7 +12,7 @@ for j in range(3):
         for i in Data:
             res[j].append(i['time'][j])
 #print(res)"""
-import json,requests,statistics
+"""import json,requests,statistics
 city_list, site_list ={}, {}
 address="雲林縣"
 msg = '找不到空氣品質資訊。'
@@ -48,4 +48,24 @@ for i in city_list:
 for i in site_list:
     if i in address:  # 如果地址裡包含鄉鎮區域名稱的 key，就直接使用對應的內容
         msg = f'空氣品質{site_list[i]["status"]} ( AQI {site_list[i]["aqi"]} )。'
-        break
+        break"""
+
+import requests
+def earth_quake():
+    msg = ['找不到地震資訊','找不到地震資訊']            # 預設回傳的訊息
+    code = 'CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8'  #https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8
+    url ='https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization='+code
+    e_data = requests.get(url)                                   # 爬取地震資訊網址
+    e_data_json = e_data.json()                                  # json 格式化訊息內容
+    eq = e_data_json['records']['Earthquake']                    # 取出地震資訊
+    for i in eq:
+        loc = i['EarthquakeInfo']['Epicenter']['Location']       # 地震地點
+        val = i['EarthquakeInfo']['EarthquakeMagnitude']['MagnitudeValue'] # 地震規模
+        dep = i['EarthquakeInfo']['FocalDepth']              # 地震深度
+        eq_time = i['EarthquakeInfo']['OriginTime']              # 地震時間
+        img = i['ReportImageURI']                                # 地震圖
+        msg = [f'{loc}，芮氏規模 {val} 級，深度 {dep} 公里，發生時間 {eq_time}。', img]
+        break     # 取出第一筆資料後就 break
+    return msg    # 回傳 msg
+a=earth_quake()
+print(a[0])

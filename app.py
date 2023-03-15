@@ -120,23 +120,20 @@ def city_status(city):
 #取得地震資訊
 def earth_quake():
     msg = ['找不到地震資訊','找不到地震資訊']            # 預設回傳的訊息
-    try:
-        code = 'CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8'  #https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8
-        url ='https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization='+code
-        e_data = requests.get(url)                                   # 爬取地震資訊網址
-        e_data_json = e_data.json()                                  # json 格式化訊息內容
-        eq = e_data_json['records']['Earthquake']                    # 取出地震資訊
-        for i in eq:
-            loc = i['EarthquakeInfo']['Epicenter']['Location']       # 地震地點
-            val = i['EarthquakeInfo']['EarthquakeMagnitude']['MagnitudeValue'] # 地震規模
-            dep = i['EarthquakeInfo']['FocalDepth']              # 地震深度
-            eq_time = i['earthquakeInfo']['OriginTime']              # 地震時間
-            img = i['ReportImageURI']                                # 地震圖
-            msg = [f'{loc}，芮氏規模 {val} 級，深度 {dep} 公里，發生時間 {eq_time}。', img]
-            break     # 取出第一筆資料後就 break
-        return msg    # 回傳 msg
-    except:
-        return msg    # 如果取資料有發生錯誤，直接回傳 msg
+    code = 'CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8'  #https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8
+    url ='https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization='+code
+    e_data = requests.get(url)                                   # 爬取地震資訊網址
+    e_data_json = e_data.json()                                  # json 格式化訊息內容
+    eq = e_data_json['records']['Earthquake']                    # 取出地震資訊
+    for i in eq:
+        loc = i['EarthquakeInfo']['Epicenter']['Location']       # 地震地點
+        val = i['EarthquakeInfo']['EarthquakeMagnitude']['MagnitudeValue'] # 地震規模
+        dep = i['EarthquakeInfo']['FocalDepth']              # 地震深度
+        eq_time = i['EarthquakeInfo']['OriginTime']              # 地震時間
+        img = i['ReportImageURI']                                # 地震圖
+        msg = [f'{loc}，芮氏規模 {val} 級，深度 {dep} 公里，發生時間 {eq_time}。', img]
+        break     # 取出第一筆資料後就 break
+    return msg    # 回傳 msg
 
 
 # function for create tmp dir for download content
@@ -254,8 +251,8 @@ def handle_message(event):
         msg=earth_quake()
         line_bot_api.reply_message(
             event.reply_token, 
-            TextSendMessage(text=msg[0]),
-            #ImageSendMessage(original_content_url=msg[1],preview_image_url=[1])
+            #TextSendMessage(text=msg[0])
+            ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
             )
     else:
         line_bot_api.reply_message(
