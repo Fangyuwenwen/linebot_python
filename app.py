@@ -254,7 +254,6 @@ def handle_message(event):
         msg=earth_quake()
         line_bot_api.reply_message(
             event.reply_token, 
-            TextSendMessage(text=msg[0]),
             ImageSendMessage(original_content_url=msg[1],preview_image_url=[1])
             )
     else:
