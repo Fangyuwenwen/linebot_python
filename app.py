@@ -251,9 +251,25 @@ def handle_message(event):
         msg=earth_quake()
         line_bot_api.reply_message(
             event.reply_token, 
-            TextSendMessage(text=msg[0]),
-            ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
+            TemplateSendMessage(
+                alt_text = '最新地震資訊',
+                template = CarouselTemplate(
+                    columns = [
+                        CarouselColumn(
+                            thumbnail_image_url =msg[1],
+                            title = '最新地震資訊',
+                            text = msg[0],
+                            actions = [
+                                URIAction(
+                                    label = '詳細內容',
+                                    uri = 'https://www.cwb.gov.tw/V8/C/E/index.html'
+                                )
+                            ]
+                        )
+                    ]
+                )
             )
+        )
     else:
         line_bot_api.reply_message(
             event.reply_token,
