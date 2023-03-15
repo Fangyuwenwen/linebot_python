@@ -210,7 +210,7 @@ def handle_message(event):
                     columns = [
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '目前空氣品質',
+                            title = city+'目前空氣品質',
                             text = msg,
                             actions = [
                                 URIAction(
