@@ -229,7 +229,7 @@ def handle_message(event):
     elif message_text == '雷達':
             line_bot_api.reply_message(
                 event.reply_token,
-                FlexSendMessage('雷達回波圖',f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}', )
+                ImageSendMessage(original_content_url='f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}'', preview_image_url='f'https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?{time.time_ns()}'')
                 )
     else:
         line_bot_api.reply_message(
