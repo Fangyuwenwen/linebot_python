@@ -121,8 +121,8 @@ def city_status(city):
 def earth_quake():
     msg = ['找不到地震資訊','找不到地震資訊']            # 預設回傳的訊息
     try:
-        code = 'CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8'
-        url = f'https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={code}'
+        code = 'CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8'  #https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-F99C4A80-6BBC-4597-8238-CD2DF9C871E8
+        url ='https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization='+code
         e_data = requests.get(url)                                   # 爬取地震資訊網址
         e_data_json = e_data.json()                                  # json 格式化訊息內容
         eq = e_data_json['records']['earthquake']                    # 取出地震資訊
@@ -254,7 +254,7 @@ def handle_message(event):
         msg=earth_quake()
         line_bot_api.reply_message(
             event.reply_token, 
-            TextSendMessage(text=msg[0])
+            TextSendMessage(text=msg[0]),
             #ImageSendMessage(original_content_url=msg[1],preview_image_url=[1])
             )
     else:
