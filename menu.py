@@ -16,11 +16,11 @@ body = {
         },
         {
           'bounds': {'x': 1251, 'y': 0, 'width':625, 'height': 640},     # 選單位置與大小
-          'action': {'type': 'message', 'text':'雷達回波圖'}               # 點擊後傳送文字
+          'action': {'type': 'message', 'text':'雷達'}               # 點擊後傳送文字
         },
         {
           'bounds': {'x': 1879, 'y': 0, 'width':625, 'height': 640},     # 選單位置與大小
-          'action': {'type': 'message', 'text':'地震資訊'}               # 點擊後傳送文字
+          'action': {'type': 'message', 'text':'地震'}               # 點擊後傳送文字
         }
     ]
   }

@@ -172,7 +172,6 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
-    location_text=event.message.location
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
@@ -215,9 +214,8 @@ def handle_message(event):
                     ]
                 )
             ))
-    elif location_text == 'location':
-        city = message_text[3:]
-        city = city.replace('台','臺')
+    elif event.message.location == 'location':
+        city = event.message.location[4:]
         if(not (city in cities)):
             line_bot_api.reply_message(
                 event.reply_token,
