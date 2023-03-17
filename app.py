@@ -215,7 +215,7 @@ def handle_message(event):
                     ]
                 )
             ))
-        elif location_text == 'location':
+    elif location_text == 'location':
         city = message_text[3:]
         city = city.replace('台','臺')
         if(not (city in cities)):
