@@ -172,6 +172,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message_text = event.message.text
+    location_text=event.message.location
     if message_text == '溫度':
         line_bot_api.reply_message(
             event.reply_token,
@@ -187,6 +188,34 @@ def handle_message(event):
             FlexSendMessage('圖表',flexmessage)
         )
     elif message_text[:2] == '天氣':
+        city = message_text[3:]
+        city = city.replace('台','臺')
+        if(not (city in cities)):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="查詢格式為: 天氣 縣市"))
+        else:
+            res = get(city)
+            line_bot_api.reply_message(
+                event.reply_token, TemplateSendMessage(
+                alt_text = city + '未來天氣預測',
+                template = CarouselTemplate(
+                    columns = [
+                        CarouselColumn(
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
+                            text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
+                            actions = [
+                                URIAction(
+                                    label = '詳細內容',
+                                    uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
+                                )
+                            ]
+                        )for data in res
+                    ]
+                )
+            ))
+        elif location_text == 'location':
         city = message_text[3:]
         city = city.replace('台','臺')
         if(not (city in cities)):
