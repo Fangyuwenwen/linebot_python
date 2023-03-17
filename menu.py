@@ -37,13 +37,26 @@ print(req.text)"""
 line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
 
 with open("richmenu.jpg", 'rb') as f:
-    line_bot_api.set_rich_menu_image("richmenu-3ed7674076c27d0b2f6f2d4c70da8a2c", "image/jpeg", f)"""
+    line_bot_api.set_rich_menu_image("richmenu-2e312eeeba3bd139bea7c3de9438002f", "image/jpeg", f)"""
     
 import requests
 
 headers = {"Authorization":"Bearer 4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=","Content-Type":"application/json"}
 
-req = requests.request('POST', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-3ed7674076c27d0b2f6f2d4c70da8a2c', 
+req = requests.request('POST', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-2e312eeeba3bd139bea7c3de9438002f', 
                        headers=headers)
 
 print(req.text)
+
+"""from linebot import (
+    LineBotApi, WebhookHandler
+)
+
+line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
+
+rich_menu_list = line_bot_api.get_rich_menu_list()
+
+for rich_menu in rich_menu_list:
+    print(rich_menu.rich_menu_id)
+    
+#line_bot_api.delete_rich_menu('richmenu-d431d553a1d0af71c5844940093e8e5f')"""
