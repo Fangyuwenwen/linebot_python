@@ -1,4 +1,4 @@
-"""import requests
+import requests
 import json
 
 # 設定 headers，輸入你的 Access Token，記得前方要加上「Bearer 」( 有一個空白 )
@@ -25,25 +25,5 @@ body = {
     ]
   }
 # 向指定網址發送 request
-req = requests.request('POST', 'https://api.line.me/v2/bot/richmenu', 
-                       headers=headers,data=json.dumps(body).encode('utf-8'))
-# 印出得到的結果
-print(req.text)"""
-
-"""from linebot import (
-    LineBotApi, WebhookHandler
-)
-
-line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
-
-with open("richmenu.jpg", 'rb') as f:
-    line_bot_api.set_rich_menu_image("richmenu-3ed7674076c27d0b2f6f2d4c70da8a2c", "image/jpeg", f)"""
-    
-import requests
-
-headers = {"Authorization":"Bearer 4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=","Content-Type":"application/json"}
-
-req = requests.request('POST', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-3ed7674076c27d0b2f6f2d4c70da8a2c', 
-                       headers=headers)
-
-print(req.text)
+req = requests.request('POST', 'https://api.line.me/v2/bot/richmenu',
+                      headers=headers,data=json.dumps(body).encode('utf-8'))
