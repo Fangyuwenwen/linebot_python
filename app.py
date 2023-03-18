@@ -188,7 +188,7 @@ def handle_message(event):
             FlexSendMessage('圖表',flexmessage)
         )
     elif event.message.type == 'location':
-        address = event.message.address[5:]
+        address = '天氣 '+event.message.address[5:8]
         if(not (address in cities)):
             line_bot_api.reply_message(
                 event.reply_token,
