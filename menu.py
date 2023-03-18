@@ -12,7 +12,7 @@ body = {
     'areas':[                                  # 選單內容
         {
           'bounds': {'x': 0, 'y': 0, 'width': 1250, 'height': 640},           # 選單位置與大小
-          'action': {'type': 'uri', 'uri': 'https://line.me/R/nv/location/'}  # 點擊後開啟地圖定位，傳送位置資訊
+          'action': {'type': 'message', 'text':'請輸入天氣 +縣市'}  # 點擊後開啟地圖定位，傳送位置資訊
         },
         {
           'bounds': {'x': 1251, 'y': 0, 'width':625, 'height': 640},     # 選單位置與大小
