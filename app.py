@@ -9,6 +9,9 @@ import sys
 import tempfile
 from urllib.request import urlopen
 from argparse import ArgumentParser
+import requests 
+from bs4 import BeautifulSoup
+import pandas as pd
 
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -36,10 +39,6 @@ from linebot.models import (
     SeparatorComponent, QuickReply, QuickReplyButton,
     ImageSendMessage)
 
-import requests 
-from bs4 import BeautifulSoup
-import pandas as pd
-#TEST
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
 CHANNEL_ID='1886703'
