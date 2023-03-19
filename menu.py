@@ -7,8 +7,8 @@ headers = {'Authorization':'Bearer 4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaD
 body = {
     'size': {'width': 2500, 'height': 640},    # 設定尺寸
     'selected': 'true',                        # 預設是否顯示
-    'name': 'bbb',                             # 選單名稱
-    'chatBarText': 'b',                        # 選單在 LINE 顯示的標題
+    'name': '選單',                             # 選單名稱
+    'chatBarText': '功能選單',                        # 選單在 LINE 顯示的標題
     'areas':[                                  # 選單內容
         {
           'bounds': {'x': 0, 'y': 0, 'width': 1250, 'height': 640},           # 選單位置與大小
@@ -37,13 +37,13 @@ print(req.text)"""
 line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
 
 with open("richmenu.jpg", 'rb') as f:
-    line_bot_api.set_rich_menu_image("richmenu-2e312eeeba3bd139bea7c3de9438002f", "image/jpeg", f)"""
+    line_bot_api.set_rich_menu_image("richmenu-cf19f8f01cdd3c25146194573bf28810", "image/jpeg", f)"""
     
 import requests
 
 headers = {"Authorization":"Bearer 4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=","Content-Type":"application/json"}
 
-req = requests.request('POST', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-2e312eeeba3bd139bea7c3de9438002f', 
+req = requests.request('POST', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-cf19f8f01cdd3c25146194573bf28810', 
                        headers=headers)
 
 print(req.text)
@@ -57,6 +57,6 @@ line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5f
 rich_menu_list = line_bot_api.get_rich_menu_list()
 
 for rich_menu in rich_menu_list:
-    print(rich_menu.rich_menu_id)
+    print(rich_menu.rich_menu_id)"""
     
 #line_bot_api.delete_rich_menu('richmenu-d431d553a1d0af71c5844940093e8e5f')"""

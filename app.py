@@ -136,6 +136,29 @@ def earth_quake():
         break     # 取出第一筆資料後就 break
     return msg    # 回傳 msg
 
+#爬取最新新聞
+import requests 
+from bs4 import BeautifulSoup
+import pandas as pd
+ 
+def news(): 
+    url = 'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant'
+    r = requests.get(url)
+    web_content = r.text
+    soup = BeautifulSoup(web_content,'lxml')
+    title = soup.find_all('div', class_='XlKvRb',limit=5)
+    #print(title)
+    titles = [t.find('a')['aria-label'] for t in title]
+    #print(titles)
+    newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in title]
+    #print(newUrls)
+    df = pd.DataFrame(
+    {
+        'title': titles,
+        'links': newUrls
+    })
+    return df
+#print(df)
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -258,6 +281,27 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token, 
             ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
+        )
+    elif message_text == '新聞':
+        now_news=news()
+        line_bot_api.reply_message(
+            event.reply_token, TemplateSendMessage(
+            alt_text = '最新熱門新聞',
+            template = CarouselTemplate(
+                columns = [
+                    CarouselColumn(
+                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                        title = '最新熱門新聞',
+                        text = '新聞標題:'+now_news[['title']],
+                        actions = [
+                            URIAction(
+                                label = '詳細內容',
+                                uri = now_news[['title']]
+                            )
+                        ]
+                    )
+                ]
+            )
         )
     else:
         line_bot_api.reply_message(
