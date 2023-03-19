@@ -36,7 +36,9 @@ from linebot.models import (
     SeparatorComponent, QuickReply, QuickReplyButton,
     ImageSendMessage)
 
-
+import requests 
+from bs4 import BeautifulSoup
+import pandas as pd
 
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
@@ -137,10 +139,6 @@ def earth_quake():
     return msg    # 回傳 msg
 
 #爬取最新新聞
-import requests 
-from bs4 import BeautifulSoup
-import pandas as pd
- 
 def news(): 
     url = 'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant'
     r = requests.get(url)
