@@ -280,7 +280,7 @@ def handle_message(event):
             event.reply_token, 
             ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
         )
-    elif message_text == '新聞':
+    """elif message_text == '新聞':
         now_news=news()
         line_bot_api.reply_message(
             event.reply_token, TemplateSendMessage(
@@ -301,7 +301,7 @@ def handle_message(event):
                 ]
             )
         )
-    )
+    )"""
     else:
         line_bot_api.reply_message(
             event.reply_token,
