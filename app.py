@@ -280,6 +280,10 @@ def handle_message(event):
             event.reply_token, 
             ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
         )
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='請輸入正確關鍵字'))
     """elif message_text == '新聞':
         now_news=news()
         line_bot_api.reply_message(
@@ -302,10 +306,6 @@ def handle_message(event):
             )
         )
     )"""
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='請輸入正確關鍵字'))
 
 @app.route('/static/<path:path>')
 def send_static_content(path):
