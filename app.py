@@ -39,7 +39,7 @@ from linebot.models import (
 import requests 
 from bs4 import BeautifulSoup
 import pandas as pd
-
+#TEST
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
 CHANNEL_ID='1886703'
