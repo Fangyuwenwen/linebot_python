@@ -7,11 +7,10 @@ import json
 import os
 import sys
 import tempfile
+import news.py
 from urllib.request import urlopen
 from argparse import ArgumentParser
-import requests 
-from bs4 import BeautifulSoup
-import pandas as pd
+
 
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -137,26 +136,6 @@ def earth_quake():
         break     # 取出第一筆資料後就 break
     return msg    # 回傳 msg
 
-#爬取最新新聞
-def news(): 
-    url = 'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant'
-    r = requests.get(url)
-    web_content = r.text
-    soup = BeautifulSoup(web_content,'lxml')
-    title = soup.find_all('div', class_='XlKvRb',limit=5)
-    #print(title)
-    titles = [t.find('a')['aria-label'] for t in title]
-    #print(titles)
-    newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in title]
-    #print(newUrls)
-    df = pd.DataFrame(
-    {
-        'title': titles,
-        'links': newUrls
-    })
-    return df
-#print(df)
-
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -279,11 +258,7 @@ def handle_message(event):
             event.reply_token, 
             ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
         )
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='請輸入正確關鍵字'))
-    """elif message_text == '新聞':
+    elif message_text == '新聞':
         now_news=news()
         line_bot_api.reply_message(
             event.reply_token, TemplateSendMessage(
@@ -304,7 +279,11 @@ def handle_message(event):
                 ]
             )
         )
-    )"""
+    )
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='請輸入正確關鍵字'))
 
 @app.route('/static/<path:path>')
 def send_static_content(path):
@@ -322,4 +301,6 @@ if __name__ == "__main__":
     # create tmp dir for download content
     make_static_tmp_dir()
 
+    news.news()
+    
     app.run(debug=options.debug, port=options.port)
