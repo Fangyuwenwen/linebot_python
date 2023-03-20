@@ -282,31 +282,27 @@ def handle_message(event):
         )
     elif message_text == '新聞':
         now_news=news()
-        now_news=news()
         item = json.loads(now_news)
-        for i in item:
-            #print(i['title'])
-            #print(i['links'])
-            line_bot_api.reply_message(
-                event.reply_token, TemplateSendMessage(
-                alt_text = '最新熱門新聞',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '最新熱門新聞',
-                            text = '新聞標題:'+i['title'],
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = i['links']
-                                )
-                            ]
-                        )
-                    ]
-                )
+        line_bot_api.reply_message(
+            event.reply_token, TemplateSendMessage(
+            alt_text = '最新熱門新聞',
+            template = CarouselTemplate(
+                columns = [
+                    CarouselColumn(
+                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                        title = '最新熱門新聞',
+                        text = '新聞標題:'+i['title'],
+                        actions = [
+                            URIAction(
+                                label = '詳細內容',
+                                uri = i['links']
+                            )
+                        ]
+                    )for i in item
+                ]
             )
         )
+    )
     else:
         line_bot_api.reply_message(
             event.reply_token,
