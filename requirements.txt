@@ -3,3 +3,4 @@ aiohttp
 aiodns
 flask
 bs4
+python == 3.10
