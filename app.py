@@ -139,7 +139,6 @@ def earth_quake():
         break     # 取出第一筆資料後就 break
     return msg    # 回傳 msg
 
-#爬取最新新聞
 def news(): 
     url = 'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant'
     r = requests.get(url)
@@ -156,7 +155,8 @@ def news():
         'title': titles,
         'links': newUrls
     })
-    return df
+    js = df.to_json(orient = 'records',force_ascii=False)
+    return js
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -282,26 +282,31 @@ def handle_message(event):
         )
     elif message_text == '新聞':
         now_news=news()
-        line_bot_api.reply_message(
-            event.reply_token, TemplateSendMessage(
-            alt_text = '最新熱門新聞',
-            template = CarouselTemplate(
-                columns = [
-                    CarouselColumn(
-                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                        title = '最新熱門新聞',
-                        text = '新聞標題:'+now_news[['title']],
-                        actions = [
-                            URIAction(
-                                label = '詳細內容',
-                                uri = now_news[['links']]
-                            )
-                        ]
-                    )
-                ]
+        now_news=news()
+        item = json.loads(now_news)
+        for i in item:
+            #print(i['title'])
+            #print(i['links'])
+            line_bot_api.reply_message(
+                event.reply_token, TemplateSendMessage(
+                alt_text = '最新熱門新聞',
+                template = CarouselTemplate(
+                    columns = [
+                        CarouselColumn(
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            title = '最新熱門新聞',
+                            text = '新聞標題:'+i['title'],
+                            actions = [
+                                URIAction(
+                                    label = '詳細內容',
+                                    uri = i['links']
+                                )
+                            ]
+                        )
+                    ]
+                )
             )
         )
-    )
     else:
         line_bot_api.reply_message(
             event.reply_token,
