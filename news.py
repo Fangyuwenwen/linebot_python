@@ -59,4 +59,4 @@ def news():
         'links': newUrls
     })
     return df
-#print(news())
+sprint(news())
