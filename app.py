@@ -294,7 +294,7 @@ def handle_message(event):
                         actions = [
                             URIAction(
                                 label = '詳細內容',
-                                uri = now_news[['title']]
+                                uri = now_news[['links']]
                             )
                         ]
                     )
