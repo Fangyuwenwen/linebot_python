@@ -308,10 +308,10 @@ def handle_message(event):
         line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text="請輸入日期(年年年年-月月-日日)"))
-        if re.match(r'(([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9]))', message_text, re.I):
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="請輸入搭車地:"))
+            if  message_text == "2023":
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="請輸入搭車地:"))
             
     else:
         line_bot_api.reply_message(
