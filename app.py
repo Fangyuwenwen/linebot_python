@@ -10,6 +10,7 @@ import tempfile
 import requests 
 from bs4 import BeautifulSoup
 import pandas as pd
+import re
 
 from urllib.request import urlopen
 from argparse import ArgumentParser
@@ -303,6 +304,15 @@ def handle_message(event):
             )
         )
     )
+    elif message_text == "高鐵":
+        line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="請輸入日期(年年年年-月月-日日)"))
+        if re.match(r'(([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9]))', message_text, re.I):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="請輸入搭車地:"))
+            
     else:
         line_bot_api.reply_message(
             event.reply_token,
