@@ -367,10 +367,10 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text="請輸入日期、上車站、下車站 (ex.高鐵2023-03-23雲林到左營)"))
         else:
-            msg = thsr_time(date,od,to)
             date = message_text[2:12]
             od = message_text[12:14]
             to = message_text[15:]
+            msg = thsr_time(date,od,to)
             line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
                 alt_text = '高鐵查詢時刻表',
