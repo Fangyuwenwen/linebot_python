@@ -72,10 +72,7 @@ def earth_quake():
 a=earth_quake()
 print(a[0])"""
 
-from datetime import datetime
-
-now_date = datetime.now()
-start_date = (str((now_date.day))+"/"+str((now_date.month))+"/"+str((now_date.year)))
-end_date = (str((now_date.day))+"/"+str((now_date.month-1))+"/"+str((now_date.year)))
-print(start_date)
-print(end_date)
+stations={"南港": "0990", "臺北": "1000", "板橋": "1010", "桃園": "1020", "新竹": "1030", "苗栗": "1035", "台中": "1040", "彰化": "1043", "雲林": "1047", "嘉義": "1050", "台南": "1060", "左營": "1070"}
+station="新北"
+if(not (station in stations)):
+            print("yes!")

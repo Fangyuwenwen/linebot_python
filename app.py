@@ -213,6 +213,7 @@ def thsr_time(u_date,u_od,u_to):
         DestinationStop.append("終點站"+i['DestinationStopTime']['StationName']['Zh_tw']+"為"+i['DestinationStopTime']['ArrivalTime'])
         #stop=zip(OriginStop,DestinationStop)
         #s_time=dict(stop)
+        return date,OriginStop,DestinationStop 
     #print(s_time)
 # function for create tmp dir for download content
 def make_static_tmp_dir():
@@ -360,7 +361,7 @@ def handle_message(event):
         )
     )
     elif message_text[:2] == "高鐵":
-        station = message_text[:2]
+        station = message_text[15:]
         if(not (station in stations)):
             line_bot_api.reply_message(
                 event.reply_token,
@@ -369,7 +370,7 @@ def handle_message(event):
             msg = thsr_time(date,od,to)
             date = message_text[2:12]
             od = message_text[12:14]
-            to = message_text[:2]
+            to = message_text[15:]
             line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
                 alt_text = '高鐵查詢時刻表',
