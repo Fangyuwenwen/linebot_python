@@ -379,7 +379,7 @@ def handle_message(event):
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
                             title = '高鐵查詢時刻表',
-                            text = msg_d+i(msg_o)+i(msg_t),
+                            text = msg_d+msg_o[i]+msg_t[i],
                             actions = [
                                 URIAction(
                                     label = '詳細內容',

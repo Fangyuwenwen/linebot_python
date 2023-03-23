@@ -38,12 +38,12 @@ if __name__ == '__main__':
     SIN={}
 
     for i in data :
-        StationID.append(i['Stations']['StationName']['Zh_tw'])
-        StationName.append(i['Stations']['StationID'])
+        StationID.append(i['StationName']['Zh_tw'])
+        StationName.append(i['StationID'])
         s=zip(StationID,StationName)
         SIN=dict(s)
-    """with open("tra_station.json","w",encoding="utf-8") as th_st_file:
-        json.dump(SIN,th_st_file,ensure_ascii = False)"""
+    with open("tra_station.json","w",encoding="utf-8") as th_st_file:
+        json.dump(SIN,th_st_file,ensure_ascii = False)
         
 """ tdx = TDX(client_id, client_secret)
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
