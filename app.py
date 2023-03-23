@@ -386,7 +386,7 @@ def handle_message(event):
                                     uri = 'https://www.thsrc.com.tw/'
                                 )
                             ]
-                        )for i in msg
+                        )for i in len(msg_o)
                     ]
                 )
             ))

@@ -30,23 +30,22 @@ class TDX():
 
 
 if __name__ == '__main__':
-    with open('thsr.json',"r",encoding="utf-8") as f:
+    with open('tra.json',"r",encoding="utf-8") as f:
         data = json.load(f)
 
     StationID=[]
     StationName=[]
     SIN={}
-    a="雲林"
-    b="嘉義"
+
     for i in data :
-        StationID.append(i['StationName']['Zh_tw'])
-        StationName.append(i['StationID'])
+        StationID.append(i['Stations']['StationName']['Zh_tw'])
+        StationName.append(i['Stations']['StationID'])
         s=zip(StationID,StationName)
         SIN=dict(s)
-    with open("thsr_station.json","w",encoding="utf-8") as th_st_file:
-        json.dump(SIN,th_st_file,ensure_ascii = False)
+    """with open("tra_station.json","w",encoding="utf-8") as th_st_file:
+        json.dump(SIN,th_st_file,ensure_ascii = False)"""
         
-    tdx = TDX(client_id, client_secret)
+""" tdx = TDX(client_id, client_secret)
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
     # url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/LiveBoard/Station/1000?$filter=Direction eq 1&$format=JSON'
     base_url = "https://tdx.transportdata.tw/api"
@@ -71,4 +70,4 @@ if __name__ == '__main__':
         DestinationStop.append("終點站"+i['DestinationStopTime']['StationName']['Zh_tw']+"為"+i['DestinationStopTime']['ArrivalTime'])
         stop=zip(OriginStop,DestinationStop)
         s_time=dict(stop)
-    print(s_time)
+    print(s_time)"""
