@@ -46,6 +46,10 @@ from linebot.models import (
 READ_API_KEY='O0TENR74YMQ8ORIT'
 CHANNEL_ID='1886703'
 
+#tdx
+client_id = '11061108-00b12e58-30cf-432d'
+client_secret = 'fac2feb7-d9a9-4389-be90-b71c4c69671f'
+
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 
@@ -60,6 +64,31 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
+#tdx會員登入
+class TDX():
+    def __init__(self, client_id, client_secret):
+        self.client_id = client_id
+        self.client_secret = client_secret
+
+    def get_token(self):
+        token_url = 'https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token'
+        headers = {'content-type': 'application/x-www-form-urlencoded'}
+        data = {
+            'grant_type': 'client_credentials',
+            'client_id': self.client_id,
+            'client_secret': self.client_secret
+        }
+        response = requests.post(token_url, headers=headers, data=data)
+        # print(response.status_code)
+        # print(response.json())
+        return response.json()['access_token']
+
+    def get_response(self, url):
+        headers = {'authorization': f'Bearer {self.get_token()}'}
+        response = requests.get(url, headers=headers)
+        return response.json()
+
 
 #取得溫度和濕度
 TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
@@ -140,6 +169,7 @@ def earth_quake():
         break     # 取出第一筆資料後就 break
     return msg    # 回傳 msg
 
+#取得最新新聞
 def news(): 
     url = 'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant'
     r = requests.get(url)
@@ -159,6 +189,31 @@ def news():
     js = df.to_json(orient = 'records',force_ascii=False)
     return js
 
+#取得高鐵時刻表
+stations={"南港": "0990", "臺北": "1000", "板橋": "1010", "桃園": "1020", "新竹": "1030", "苗栗": "1035", "台中": "1040", "彰化": "1043", "雲林": "1047", "嘉義": "1050", "台南": "1060", "左營": "1070"}
+def thsr_time(u_date,u_od,u_to):
+    tdx = TDX(client_id, client_secret)
+    #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
+    base_url = "https://tdx.transportdata.tw/api"
+    endpoint = "/basic/v2/Rail/THSR/DailyTimetable/"
+    od="OD/"+u_od+"/"
+    to="to/"+u_to+"/"
+    date=u_date
+    filter = "?%24top=30&%24format=JSON"
+    url = base_url+endpoint+od+to+date+filter
+    response = tdx.get_response(url)
+    #print(response)
+    t_no=[]
+    OriginStop=[]
+    DestinationStop=[]
+    #s_time={}
+    for i in response :
+        t_no.append("車次:"+i["DailyTrainInfo"]["TrainNo"])
+        OriginStop.append("起點站"+i['OriginStopTime']['StationName']['Zh_tw']+"為"+i['OriginStopTime']['ArrivalTime'])
+        DestinationStop.append("終點站"+i['DestinationStopTime']['StationName']['Zh_tw']+"為"+i['DestinationStopTime']['ArrivalTime'])
+        #stop=zip(OriginStop,DestinationStop)
+        #s_time=dict(stop)
+    #print(s_time)
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -305,14 +360,35 @@ def handle_message(event):
         )
     )
     elif message_text == "高鐵":
-        line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="請輸入日期(年年年年-月月-日日)"))
-        message_text_1 = event.message.text
-        if  message_text_1 == "2023":
+        station = message_text[:2]
+        if(not (station in stations)):
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="請輸入搭車地:"))
+                TextSendMessage(text="請輸入日期、上車站、下車站 (ex.高鐵2023-03-23雲林到左營)"))
+        else:
+            msg = thsr_time(date,od,to)
+            date = message_text[2:12]
+            od = message_text[12:14]
+            to = message_text[:2]
+            line_bot_api.reply_message(
+                event.reply_token, TemplateSendMessage(
+                alt_text = '高鐵查詢時刻表',
+                template = CarouselTemplate(
+                    columns = [
+                        CarouselColumn(
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            title = '高鐵查詢時刻表',
+                            text = i(msg.date)+i(msg.od)+i(msg.to),
+                            actions = [
+                                URIAction(
+                                    label = '詳細內容',
+                                    uri = 'https://www.thsrc.com.tw/'
+                                )
+                            ]
+                        )for i in msg
+                    ]
+                )
+            ))
             
     else:
         line_bot_api.reply_message(
