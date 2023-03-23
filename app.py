@@ -359,7 +359,7 @@ def handle_message(event):
             )
         )
     )
-    elif message_text == "高鐵":
+    elif message_text[:2] == "高鐵":
         station = message_text[:2]
         if(not (station in stations)):
             line_bot_api.reply_message(
