@@ -208,13 +208,20 @@ def thsr_time(u_date,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        t_no.append("車次:"+i["DailyTrainInfo"]["TrainNo"])
-        OriginStop.append("起點站"+i['OriginStopTime']['StationName']['Zh_tw']+"為"+i['OriginStopTime']['ArrivalTime'])
-        DestinationStop.append("終點站"+i['DestinationStopTime']['StationName']['Zh_tw']+"為"+i['DestinationStopTime']['ArrivalTime'])
+        t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
+        OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
+        DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
         #stop=zip(OriginStop,DestinationStop)
         #s_time=dict(stop)
-    return date,OriginStop,DestinationStop 
     #print(s_time)
+    df = pd.DataFrame(
+    {
+        't_no': t_no,
+        'OriginStop': OriginStop,
+        'DestinationStop':DestinationStop
+    })
+    js = df.to_json(orient = 'records',force_ascii=False)
+    return(js)
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -370,26 +377,28 @@ def handle_message(event):
             date = message_text[2:12]
             od = message_text[12:14]
             to = message_text[15:]
-            msg_d,msg_o,msg_t = thsr_time(date,od,to)
+            thsr_t = thsr_time(date,od,to)
+            item = json.loads(thsr_t)
             line_bot_api.reply_message(
-                event.reply_token, TemplateSendMessage(
-                alt_text = '高鐵查詢時刻表',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '高鐵查詢時刻表',
-                            text = msg_d+msg_o[i]+msg_t[i],
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = 'https://www.thsrc.com.tw/'
-                                )
-                            ]
-                        )for i in len(msg_o)
-                    ]
-                )
-            ))
+            event.reply_token,TemplateSendMessage(
+            alt_text = '查詢高鐵班次',
+            template = CarouselTemplate(
+                columns = [
+                    CarouselColumn(
+                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                        title = '查詢高鐵班次',
+                        text = '班次: '+i['t_no']+'出發時間: '+i['OriginStop']+'抵達時間: '+i['DestinationStop'],
+                        actions = [
+                            URIAction(
+                                label = '詳細內容',
+                                uri = "https://www.thsrc.com.tw/"
+                            )
+                        ]
+                    )for i in item
+                ]
+            )
+        ) 
+    )
             
     else:
         line_bot_api.reply_message(
