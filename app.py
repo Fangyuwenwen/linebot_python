@@ -193,11 +193,12 @@ def news():
 stations={"南港": "0990", "臺北": "1000", "板橋": "1010", "桃園": "1020", "新竹": "1030", "苗栗": "1035", "台中": "1040", "彰化": "1043", "雲林": "1047", "嘉義": "1050", "台南": "1060", "左營": "1070"}
 def thsr_time(u_date,u_od,u_to):
     tdx = TDX(client_id, client_secret)
+    y = json.loads(stations)
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
     base_url = "https://tdx.transportdata.tw/api"
     endpoint = "/basic/v2/Rail/THSR/DailyTimetable/"
-    od="OD/"+u_od+"/"
-    to="to/"+u_to+"/"
+    od="OD/"+y[u_od]+"/"
+    to="to/"+y[u_to]+"/"
     date=u_date
     filter = "?%24top=30&%24format=JSON"
     url = base_url+endpoint+od+to+date+filter
