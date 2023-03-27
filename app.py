@@ -380,6 +380,23 @@ def handle_message(event):
             to = message_text[15:]
             thsr_t = thsr_time(date,od,to)
             item = json.loads(thsr_t)
+            con=[]
+            for i in item:
+                c=[
+                    {
+                        "type": "text",
+                        "text": i['t_no']
+                    },
+                    {
+                        "type": "text",
+                        "text": i['OriginStop']
+                    },
+                    {
+                        "type": "text",
+                        "text": i['DestinationStop']
+                    }
+                ]
+            con.append(c)
             line_bot_api.reply_message(
             event.reply_token,
             FlexSendMessage(
@@ -428,21 +445,8 @@ def handle_message(event):
                             {
                                 "type": "box",
                                 "layout": "horizontal",
-                                "contents": [
-                                {
-                                    "type": "text",
-                                    "text": i['t_no']
-                                },
-                                {
-                                    "type": "text",
-                                    "text": i['OriginStop']
-                                },
-                                {
-                                    "type": "text",
-                                    "text": i['DestinationStop']
-                                }
-                                ]
-                            }for i in item    
+                                "contents": con
+                            }   
                             ]
                         },
                         "footer": {
