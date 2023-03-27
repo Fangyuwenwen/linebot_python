@@ -384,19 +384,37 @@ def handle_message(event):
             con=[]
             for i in item:
                 c=[
-                    {
-                        "type": "text",
-                        "text": i['t_no']
-                    },
-                    {
-                        "type": "text",
-                        "text": i['OriginStop']
-                    },
-                    {
-                        "type": "text",
-                        "text": i['DestinationStop']
-                    }
-                ]
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "車次: " + i['t_no']
+                            }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "上車站: " + i['OriginStop']
+                            }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "下車站: " + i['DestinationStop']
+                            }
+                            ]
+                        }
+                    ]
             con.append(c)
             line_bot_api.reply_message(
             event.reply_token,
@@ -404,71 +422,31 @@ def handle_message(event):
                 alt='時刻表',
                 contents= 
                     {
-                        "type": "bubble",
-                        "body": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "box",
-                                "layout": "horizontal",
-                                "margin": "lg",
-                                "spacing": "sm",
-                                "contents": [
-                                {
-                                    "type": "box",
-                                    "layout": "baseline",
-                                    "spacing": "sm",
-                                    "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "車次",
-                                        "margin": "none",
-                                        "size": "md",
-                                        "style": "normal"
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": od,
-                                        "margin": "none",
-                                        "size": "md"
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": to,
-                                        "margin": "none",
-                                        "size": "md"
-                                    }
-                                    ]
-                                }  
-                                ]
-                            },
-                            {
-                                "type": "box",
-                                "layout": "horizontal",
-                                "contents": con
-                            }   
-                            ]
-                        },
-                        "footer": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "spacing": "sm",
-                            "contents": [
-                            {
-                                "type": "button",
-                                "style": "link",
-                                "height": "sm",
-                                "action": {
-                                "type": "uri",
-                                "label": "前往訂票",
-                                "uri": "https://linecorp.com"
-                                }
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": con
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "spacing": "sm",
+                        "contents": [
+                        {
+                            "type": "button",
+                            "style": "link",
+                            "height": "sm",
+                            "action": {
+                            "type": "uri",
+                            "label": "WEBSITE",
+                            "uri": "https://linecorp.com"
                             }
-                            ],
-                            "flex": 0
                         }
-                }          
+                        ],
+                        "flex": 0
+                    }
+                }
             )
     )
             
