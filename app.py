@@ -191,6 +191,7 @@ def news():
 
 #取得高鐵時刻表
 stations='{"南港": "0990", "臺北": "1000", "板橋": "1010", "桃園": "1020", "新竹": "1030", "苗栗": "1035", "台中": "1040", "彰化": "1043", "雲林": "1047", "嘉義": "1050", "台南": "1060", "左營": "1070"}'
+thsr_city=['南港','臺北','板橋','桃園','新竹','苗栗','台中','彰化','雲林','嘉義','台南','左營']
 def thsr_time(u_date,u_od,u_to):
     tdx = TDX(client_id, client_secret)
     y = json.loads(stations)
@@ -370,7 +371,7 @@ def handle_message(event):
     )
     elif message_text[:2] == "高鐵":
         station = message_text[15:]
-        if(not (station in stations)):
+        if(not (station in thsr_city)):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text="請輸入日期、上車站、下車站 (ex.高鐵2023-03-23雲林到左營)"))
