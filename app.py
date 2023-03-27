@@ -422,7 +422,7 @@ def handle_message(event):
                                         "size": "md"
                                     }
                                     ]
-                                }
+                                }  
                                 ]
                             },
                             {
@@ -442,7 +442,7 @@ def handle_message(event):
                                     "text": i['DestinationStop']
                                 }
                                 ]
-                            }
+                            }for i in item    
                             ]
                         },
                         "footer": {
@@ -463,8 +463,8 @@ def handle_message(event):
                             ],
                             "flex": 0
                         }
-                }             
-            )for i in item
+                }          
+            )
     )
             
     else:
