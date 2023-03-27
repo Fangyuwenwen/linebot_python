@@ -383,88 +383,88 @@ def handle_message(event):
             line_bot_api.reply_message(
             event.reply_token,
             FlexSendMessage(
-                alt='時刻表,'
+                alt='時刻表',
                 contents= 
-    {
-        "type": "bubble",
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-            {
-                "type": "box",
-                "layout": "horizontal",
-                "margin": "lg",
-                "spacing": "sm",
-                "contents": [
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
                     {
-                        "type": "text",
-                        "text": "車次",
-                        "margin": "none",
-                        "size": "md",
-                        "style": "normal"
-                    },
-                    {
-                        "type": "text",
-                        "text": "上車站",
-                        "margin": "none",
-                        "size": "md"
-                    },
-                    {
-                        "type": "text",
-                        "text": "下車站",
-                        "margin": "none",
-                        "size": "md"
-                    }
-                    ]
-                }
-                ]
-            },
-            {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                {
-                    "type": "text",
-                    "text": "111"
-                },
-                {
-                    "type": "text",
-                    "text": "111"
-                },
-                {
-                    "type": "text",
-                    "text": "111"
-                }
-                ]
-            }
-            ]
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-            {
-                "type": "button",
-                "style": "link",
-                "height": "sm",
-                "action": {
-                "type": "uri",
-                "label": "前往訂票",
-                "uri": "https://linecorp.com"
-                }
-            }
-            ],
-            "flex": 0
-        }
-}             
-        )
+                        "type": "bubble",
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "margin": "lg",
+                                "spacing": "sm",
+                                "contents": [
+                                {
+                                    "type": "box",
+                                    "layout": "baseline",
+                                    "spacing": "sm",
+                                    "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "車次",
+                                        "margin": "none",
+                                        "size": "md",
+                                        "style": "normal"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": od,
+                                        "margin": "none",
+                                        "size": "md"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": to,
+                                        "margin": "none",
+                                        "size": "md"
+                                    }
+                                    ]
+                                }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                {
+                                    "type": "text",
+                                    "text": i['t_no']
+                                },
+                                {
+                                    "type": "text",
+                                    "text": i['OriginStop']
+                                },
+                                {
+                                    "type": "text",
+                                    "text": i['DestinationStop']
+                                }
+                                ]
+                            }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                            {
+                                "type": "button",
+                                "style": "link",
+                                "height": "sm",
+                                "action": {
+                                "type": "uri",
+                                "label": "前往訂票",
+                                "uri": "https://linecorp.com"
+                                }
+                            }
+                            ],
+                            "flex": 0
+                        }
+                }             
+            )for i in item
     )
             
     else:
