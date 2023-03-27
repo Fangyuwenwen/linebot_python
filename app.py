@@ -381,24 +381,90 @@ def handle_message(event):
             thsr_t = thsr_time(date,od,to)
             item = json.loads(thsr_t)
             line_bot_api.reply_message(
-            event.reply_token,TemplateSendMessage(
-            alt_text = '查詢高鐵班次',
-            template = CarouselTemplate(
-                columns = [
-                    CarouselColumn(
-                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                        title = '查詢高鐵班次',
-                        text = '班次: '+i['t_no']+'出發時間: '+i['OriginStop']+'抵達時間: '+i['DestinationStop'],
-                        actions = [
-                            URIAction(
-                                label = '詳細內容',
-                                uri = "https://www.thsrc.com.tw/"
-                            )
-                        ]
-                    )for i in item
+            event.reply_token,
+            FlexSendMessage(
+                alt='時刻表,'
+                contents= 
+    {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "margin": "lg",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "車次",
+                        "margin": "none",
+                        "size": "md",
+                        "style": "normal"
+                    },
+                    {
+                        "type": "text",
+                        "text": "上車站",
+                        "margin": "none",
+                        "size": "md"
+                    },
+                    {
+                        "type": "text",
+                        "text": "下車站",
+                        "margin": "none",
+                        "size": "md"
+                    }
+                    ]
+                }
                 ]
-            )
-        ) 
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "111"
+                },
+                {
+                    "type": "text",
+                    "text": "111"
+                },
+                {
+                    "type": "text",
+                    "text": "111"
+                }
+                ]
+            }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+            {
+                "type": "button",
+                "style": "link",
+                "height": "sm",
+                "action": {
+                "type": "uri",
+                "label": "前往訂票",
+                "uri": "https://linecorp.com"
+                }
+            }
+            ],
+            "flex": 0
+        }
+}             
+        )
     )
             
     else:
