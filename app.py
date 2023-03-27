@@ -197,8 +197,8 @@ def thsr_time(u_date,u_od,u_to):
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
     base_url = "https://tdx.transportdata.tw/api"
     endpoint = "/basic/v2/Rail/THSR/DailyTimetable/"
-    od="OD/"+y[u_od]+"/"
-    to="to/"+y[u_to]+"/"
+    od='OD/'+y[u_od]+'/'
+    to='to/'+y[u_to]+'/'
     date=u_date
     filter = "?%24top=30&%24format=JSON"
     url = base_url+endpoint+od+to+date+filter
@@ -369,7 +369,7 @@ def handle_message(event):
         )
     )
     elif message_text[:2] == "高鐵":
-        station = message_text[15:]
+        station = message_text[:2]
         if(not (station in stations)):
             line_bot_api.reply_message(
                 event.reply_token,
