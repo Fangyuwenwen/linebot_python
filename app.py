@@ -572,7 +572,7 @@ def handle_message(event):
       }
     }
 )
-            )
+)
             
             
     else:
@@ -600,33 +600,33 @@ if __name__ == "__main__":
     
     
     
-            """FlexSendMessage(
-                alt_text='時刻表',
-                contents= 
-                    {
-                    "type": "bubble",
-                    "body": {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents":con
-                    },
-                    "footer": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "button",
-                            "style": "link",
-                            "height": "sm",
-                            "action": {
-                            "type": "uri",
-                            "label": "WEBSITE",
-                            "uri": "https://linecorp.com"
-                            }
-                        }
-                        ],
-                        "flex": 0
-                    }
+"""FlexSendMessage(
+    alt_text='時刻表',
+    contents= 
+        {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents":con
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+            {
+                "type": "button",
+                "style": "link",
+                "height": "sm",
+                "action": {
+                "type": "uri",
+                "label": "WEBSITE",
+                "uri": "https://linecorp.com"
                 }
-            )"""
+            }
+            ],
+            "flex": 0
+        }
+    }
+)"""
