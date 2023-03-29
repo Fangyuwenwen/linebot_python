@@ -419,7 +419,7 @@ def handle_message(event):
             line_bot_api.reply_message(
             event.reply_token,
             FlexSendMessage(
-                alt='時刻表',
+                alt_text='時刻表',
                 contents= 
                     {
                     "type": "bubble",
