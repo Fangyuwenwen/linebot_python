@@ -417,8 +417,190 @@ def handle_message(event):
                     ]
                 con.append(c)
             line_bot_api.reply_message(
+            event.reply_token,FlexSendMessage(
+    alt_text='hello',
+    contents={
+      "type": "bubble",
+      "hero": {
+        "type": "image",
+        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "action": {
+          "type": "uri",
+          "uri": "http://linecorp.com/"
+        }
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Brown Cafe",
+            "weight": "bold",
+            "size": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+              },
+              {
+                "type": "icon",
+                "size": "sm",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png"
+              },
+              {
+                "type": "text",
+                "text": "4.0",
+                "size": "sm",
+                "color": "#999999",
+                "margin": "md",
+                "flex": 0
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Place",
+                    "color": "#aaaaaa",
+                    "size": "sm",
+                    "flex": 1
+                  },
+                  {
+                    "type": "text",
+                    "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
+                    "wrap": True,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Time",
+                    "color": "#aaaaaa",
+                    "size": "sm",
+                    "flex": 1
+                  },
+                  {
+                    "type": "text",
+                    "text": "10:00 - 23:00",
+                    "wrap": True,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+              "type": "uri",
+              "label": "CALL",
+              "uri": "https://linecorp.com"
+            }
+          },
+          {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+              "type": "uri",
+              "label": "WEBSITE",
+              "uri": "https://linecorp.com"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "margin": "sm"
+          }
+        ],
+        "flex": 0
+      }
+    }
+)
+            )
+            
+            
+    else:
+        line_bot_api.reply_message(
             event.reply_token,
-            FlexSendMessage(
+            TextSendMessage(text='請輸入正確關鍵字'))
+
+@app.route('/static/<path:path>')
+def send_static_content(path):
+    return send_from_directory('static', path)
+
+
+if __name__ == "__main__":
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    # create tmp dir for download content
+    make_static_tmp_dir()
+    
+    app.run(debug=options.debug, port=options.port)
+    
+    
+    
+            """FlexSendMessage(
                 alt_text='時刻表',
                 contents= 
                     {
@@ -447,28 +629,4 @@ def handle_message(event):
                         "flex": 0
                     }
                 }
-            )
-    )
-            
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='請輸入正確關鍵字'))
-
-@app.route('/static/<path:path>')
-def send_static_content(path):
-    return send_from_directory('static', path)
-
-
-if __name__ == "__main__":
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
-
-    # create tmp dir for download content
-    make_static_tmp_dir()
-    
-    app.run(debug=options.debug, port=options.port)
+            )"""
