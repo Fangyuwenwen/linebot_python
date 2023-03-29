@@ -426,7 +426,38 @@ def handle_message(event):
                     "body": {
                         "type": "box",
                         "layout": "horizontal",
-                        "contents": con
+                        "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "車次: " 
+                            }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "上車站: " 
+                            }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "下車站: "
+                            }
+                            ]
+                        }
+                    ]
                     },
                     "footer": {
                         "type": "box",
