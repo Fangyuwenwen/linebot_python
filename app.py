@@ -415,7 +415,7 @@ def handle_message(event):
                             ]
                         }
                     ]
-            con.append(c)
+                con.append(c)
             line_bot_api.reply_message(
             event.reply_token,
             FlexSendMessage(
@@ -426,38 +426,7 @@ def handle_message(event):
                     "body": {
                         "type": "box",
                         "layout": "horizontal",
-                        "contents": [
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": "車次: " 
-                            }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": "上車站: " 
-                            }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": "下車站: "
-                            }
-                            ]
-                        }
-                    ]
+                        "contents":con
                     },
                     "footer": {
                         "type": "box",
