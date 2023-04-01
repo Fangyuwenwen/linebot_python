@@ -240,7 +240,6 @@ def tra_time(u_date,u_od,u_to):
     filter = "?%24top=30&%24format=JSON"
     #filter = "Direction eq 1"  # 順逆行: [0:'順行', 1:'逆行']
     url = base_url+endpoint+od+to+date+filter
-
     response = tdx.get_response(url)
     #print(response)
     t_no=[]
@@ -261,7 +260,7 @@ def tra_time(u_date,u_od,u_to):
         'DestinationStop':DestinationStop
     })
     js = df.to_json(orient = 'records',force_ascii=False)
-    return js
+    return(js)
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
