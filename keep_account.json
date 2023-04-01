@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fluted-environs-224403",
+  "private_key_id": "83b9b57f5657a30bf4fc93c2d139d6f1d2512b7c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCx+9upmJilGHag\na1xDf4kB0WkMZ4gof3eclAVb6h0smjsLsl/1UqnDZ3fYWJXKvrJTYZOKrY1HkDm0\n7SBYvJgXUy0Nbms/fwe0nMMhSnbU7il16nHBog3DLe8t7OcgyhIHxXe/U+G10906\n2v3gVFE4XLfY6YtZSsHZr8b8peUAYTNZc1J2BnKr432xnFNcFhfWXJR+Dkgqs4YS\nO1i0iAAzMIDJCvoxOYUbrQZwneV1MVAkJBLFjdVvyCujkGs7vjOBRf7/LAXE3f4A\n46sJcpJoiT9biMEUmvPuUHdS33PlS+4p75FKB10pnXsXM9RnP1eQWl3gf5NGQKPb\nmtuIAH9rAgMBAAECggEADMh9D2JBXGI0avMrDkIDshi7RcPN2LLHAXz0IZTgAYsW\nQJHQKIuGW917kxNRtt0Za7mvYh9y7TfjnSYG07i/57T2oGdU1pumDwfPT/3MKSDt\n42UyRGkCOgl7iz3fn9BDmUFKh3hb1rZfxlFiOJF1v+mQ3shvVLt0ztC8Jvs3Rl6W\nJo5EvU5LGRdHxtQU77MrqeAbvpgLpNRlYbCjExtQw/ZNhw9z1+3wZpustKQI23L4\nkP/EP05+B0bLAzlDLyPQ8kUmusjn4tbbWOxfazyGCpUOZFdUBsQEIx6mA7RLUrgy\nCjUG/dDPxGFo0cEzaQkGBN0x1hjY9XvjAPO/ixMJ0QKBgQDcxmjbZbBNRVdAMr0T\n/4w/KnqmmIwQpqRVdLyNHXb4slOSfQjiLMqFXJnOcH/7CujJ5P/bTn7xjhJRsnTZ\nqVC3sCVytFi8gglwtU+CAstWI2HR35tQlOPfzhCIQVnqDEo8YX/0qPuzkj5yKLGH\nN610AXyxNKFMyj7/onEvnyvhgwKBgQDOYaJ1/80RlTD8Y2oOXt8NGRqs+XrqgrKO\npVN2KXSQizFeCuhtp/zEpvo87rokh1XZMEaTbf1b+x5sBk2+6K+BQDwRYYZKvk2N\nlEFPY+A3zfySchlBZQI/MXKdheSo9NMZCsjZqPFAxuVcMHq7lCmST1SGzVVhR3oV\nFdMdXt+N+QKBgHgEWD5k0mm/N0ZMDuOPOYOhKRnltcbbgFyAYHvqN6HM94eb9zdV\nGCdVhrtmBvzHGnOezMRAsNvJ2wWUmNc2pw2kcUcg6VhY7J7bwcQwlq9V/rhj8X/l\n4Nbqo6wesq18TuLyMegj8OjWqKHQo2mZh+6XXFzM+p7PF15KxXMY+XbXAoGBAKwU\n4raLDP1NLaQ0bHkBB/DO7twtxRyGz8V6+oV6+XOQbCBi7fyI5o0+QUbPMyxEIAPR\nafeB7ZBlaa9e7jJxp+0Ylz1S2Pu3g8i6Rl6hA5LkUWX2dzJ8u4vfehb4TnnGccHe\nqSw73rVJYnMlBSEk4CjbtroTuc48IAI2yWoi8jpZAoGBAJLxTfYbovsWCOniWI6O\nwPoNksg8g+er+7eQkhksdM7tw7j7FUvVoDeT42tW1A8dmP+yoXywUrG1HLk83LFy\n8EiQus56umqYRldS8a1HY/sRKjMCn7Q2pPWpfHKE4QqOqjM8MaP8pg48L7qYv4i+\nYmVDmK//D2MATjee0mnB7qgj\n-----END PRIVATE KEY-----\n",
+  "client_email": "keeping-account@fluted-environs-224403.iam.gserviceaccount.com",
+  "client_id": "102109608074838293769",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/keeping-account%40fluted-environs-224403.iam.gserviceaccount.com"
+}
