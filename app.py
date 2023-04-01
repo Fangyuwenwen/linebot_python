@@ -436,7 +436,7 @@ def handle_message(event):
             date = message_text[2:12]
             od = message_text[12:14]
             to = message_text[15:]
-            thsr_t = thsr_time(date,od,to)
+            thsr_t = tra_time(date,od,to)
             item = json.loads(thsr_t)
             mes=" "
             for i in item:
