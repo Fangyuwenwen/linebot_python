@@ -234,8 +234,8 @@ def tra_time(u_date,u_od,u_to):
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/DailyTimetable/OD/3470/to/4340/2023-03-24?%24top=30&%24format=JSON'
     base_url = "https://tdx.transportdata.tw/api"
     endpoint = "/basic/v2/Rail/TRA/DailyTimetable/"
-    od="OD/"+ u_od+"/"
-    to="to/"+u_to+"/"
+    od="OD/"+ y[u_od]+"/"
+    to="to/"+y[u_to]+"/"
     date=u_date
     filter = "?%24top=30&%24format=JSON"
     #filter = "Direction eq 1"  # 順逆行: [0:'順行', 1:'逆行']
