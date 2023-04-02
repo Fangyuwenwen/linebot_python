@@ -210,10 +210,10 @@ def thsr_time(u_date,u_time,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        if  parse(i['OriginStopTime']['ArrivalTime']) >= parse(u_time) :
-            t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
-            OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
-            DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
+        #if  parse(i['OriginStopTime']['ArrivalTime']) >= parse(u_time) :
+        t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
+        OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
+        DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
         #stop=zip(OriginStop,DestinationStop)
         #s_time=dict(stop)
     #print(s_time)
