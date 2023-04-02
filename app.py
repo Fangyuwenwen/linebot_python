@@ -409,7 +409,7 @@ def handle_message(event):
         )
     )
     elif message_text[:2] == "高鐵":
-        station = message_text[15:]
+        station = message_text[20:]
         if(not (station in thsr_city)):
             line_bot_api.reply_message(
                 event.reply_token,
@@ -418,7 +418,7 @@ def handle_message(event):
             date = message_text[2:12]
             time = message_text[13:18]
             od = message_text[18:20]
-            to = message_text[15:]
+            to = message_text[20:]
             thsr_t = thsr_time(date,time,od,to)
             item = json.loads(thsr_t)
             mes=" "
