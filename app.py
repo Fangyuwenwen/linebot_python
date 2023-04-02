@@ -424,10 +424,10 @@ def handle_message(event):
             mes=" "
             for i in item:
                 mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
-            m="車次 "+" 上車時間 "+" 下車時間 "
+            #m="車次 "+" 上車時間 "+" 下車時間 "
             line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=m+mes)
+            TextSendMessage(text=mes)
     )
     elif message_text[:2] == "台鐵":
         station = message_text[15:]
