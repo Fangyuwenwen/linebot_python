@@ -421,7 +421,9 @@ def handle_message(event):
             item = json.loads(thsr_t)
             mes=" "
             for i in item:
-                mes+="車次: "+i["t_no"]+" 上車時間: "+i["OriginStop"]+" 下車時間: "+i["DestinationStop"]+"\n"
+                m="車次: "+" 上車時間: "+" 下車時間: "
+                me=+i["t_no"]+i["OriginStop"]+i["DestinationStop"]+"\n"
+                mes=m+me
             line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=mes)
