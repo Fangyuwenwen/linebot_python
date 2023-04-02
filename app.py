@@ -14,7 +14,7 @@ import re
 
 from urllib.request import urlopen
 from argparse import ArgumentParser
-
+from dateutil.parser import parse
 
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -210,7 +210,7 @@ def thsr_time(u_date,u_time,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        if str(i['OriginStopTime']['ArrivalTime']) >= str(u_time) :
+        if  parse(i['OriginStopTime']['ArrivalTime']) >= parse(u_time) :
             t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
             OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
             DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
