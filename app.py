@@ -210,7 +210,7 @@ def thsr_time(u_date,u_time,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        if i['OriginStopTime']['ArrivalTime'] >= str(u_time) :
+        if i['OriginStopTime']['ArrivalTime'] >= u_time :
             t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
             OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
             DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
@@ -416,7 +416,7 @@ def handle_message(event):
                 TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
         else:
             date = message_text[2:12]
-            time = message_text[13:18]
+            time = str(message_text[13:18])
             od = message_text[18:20]
             to = message_text[21:]
             thsr_t = thsr_time(date,time,od,to)
@@ -424,10 +424,9 @@ def handle_message(event):
             mes=" "
             for i in item:
                 mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
-            #m="車次 "+" 上車時間 "+" 下車時間 "
             line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=mes)
+            TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
     )
     elif message_text[:2] == "台鐵":
         station = message_text[15:]
