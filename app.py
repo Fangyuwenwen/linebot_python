@@ -422,7 +422,7 @@ def handle_message(event):
             mes=" "
             for i in item:
                 m="車次: "+" 上車時間: "+" 下車時間: "
-                mes="\n"+i["t_no"]+i["OriginStop"]+i["DestinationStop"]+"\n"
+                mes+="\n"+i["t_no"]+i["OriginStop"]+i["DestinationStop"]+"\n"
                 z=m+mes
             line_bot_api.reply_message(
             event.reply_token,
