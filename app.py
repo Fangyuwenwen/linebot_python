@@ -421,12 +421,12 @@ def handle_message(event):
             item = json.loads(thsr_t)
             mes=" "
             for i in item:
-                m="車次: "+"上車時間: "+"下車時間: "
-                me+=i["t_no"]+i["OriginStop"]+i["DestinationStop"]+"\n"
-                mes=m+me
+                m="車次: "+" 上車時間: "+" 下車時間: "
+                mes="\n"+i["t_no"]+i["OriginStop"]+i["DestinationStop"]+"\n"
+                z=m+mes
             line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=mes)
+            TextSendMessage(text=z)
     )
     elif message_text[:2] == "台鐵":
         station = message_text[15:]
