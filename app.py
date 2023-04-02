@@ -14,7 +14,7 @@ import re
 
 from urllib.request import urlopen
 from argparse import ArgumentParser
-from dateutil.parser import parse
+
 
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -210,10 +210,10 @@ def thsr_time(u_date,u_time,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        #if  parse(i['OriginStopTime']['ArrivalTime']) >= parse(u_time) :
-        t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
-        OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
-        DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
+        if i['OriginStopTime']['ArrivalTime'] >= u_time :
+            t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
+            OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
+            DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
         #stop=zip(OriginStop,DestinationStop)
         #s_time=dict(stop)
     #print(s_time)
@@ -442,10 +442,10 @@ def handle_message(event):
             item = json.loads(thsr_t)
             mes=" "
             for i in item:
-                mes+="車次: "+i["t_no"]+" 上車時間: "+i["OriginStop"]+" 下車時間: "+i["DestinationStop"]+"\n"
+                mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
             line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=mes)
+            TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
     )        
     else:
         line_bot_api.reply_message(
