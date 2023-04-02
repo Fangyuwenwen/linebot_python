@@ -192,7 +192,7 @@ def news():
 #取得高鐵時刻表
 thsr_stations='{"南港": "0990", "臺北": "1000", "板橋": "1010", "桃園": "1020", "新竹": "1030", "苗栗": "1035", "台中": "1040", "彰化": "1043", "雲林": "1047", "嘉義": "1050", "台南": "1060", "左營": "1070"}'
 thsr_city=['南港','臺北','板橋','桃園','新竹','苗栗','台中','彰化','雲林','嘉義','台南','左營']
-def thsr_time(u_date,u_od,u_to):
+def thsr_time(u_date,u_time,u_od,u_to):
     tdx = TDX(client_id, client_secret)
     y = json.loads(thsr_stations)
     #url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1047/to/1070/2023-03-22?%24top=30&%24format=JSON' 
@@ -210,9 +210,10 @@ def thsr_time(u_date,u_od,u_to):
     DestinationStop=[]
     #s_time={}
     for i in response :
-        t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
-        OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
-        DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
+        if i['OriginStopTime']['ArrivalTime'] >= u_time :
+            t_no.append(i["DailyTrainInfo"]["TrainNo"]) #車次
+            OriginStop.append(i['OriginStopTime']['StationName']['Zh_tw']+" "+i['OriginStopTime']['ArrivalTime']) #出發+出發時間
+            DestinationStop.append(i['DestinationStopTime']['StationName']['Zh_tw']+" "+i['DestinationStopTime']['ArrivalTime']) #抵達+抵達時間
         #stop=zip(OriginStop,DestinationStop)
         #s_time=dict(stop)
     #print(s_time)
@@ -412,12 +413,13 @@ def handle_message(event):
         if(not (station in thsr_city)):
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="請輸入日期、上車站、下車站 (ex.高鐵2023-03-23雲林到左營)"))
+                TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
         else:
             date = message_text[2:12]
-            od = message_text[12:14]
+            time = message_text[13:18]
+            od = message_text[18:20]
             to = message_text[15:]
-            thsr_t = thsr_time(date,od,to)
+            thsr_t = thsr_time(date,time,od,to)
             item = json.loads(thsr_t)
             mes=" "
             for i in item:
