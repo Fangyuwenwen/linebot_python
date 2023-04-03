@@ -428,7 +428,7 @@ def handle_message(event):
             line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
-    )
+        )
     elif message_text[:2] == "台鐵":
         station = message_text[21:]
         if(not (station in tra_city)):
@@ -438,8 +438,15 @@ def handle_message(event):
         else:
             date = message_text[2:12]
             time = message_text[13:18]
-            od = message_text[18:20]
-            to = message_text[21:]
+            if(message_text[18:20] in tra_city):
+                od = message_text[18:20]
+                to = message_text[21:]
+            elif(message_text[18:21] in tra_city):
+                od = message_text[18:21]
+                to = message_text[22:]
+            elif(message_text[18:22] in tra_city):
+                od = message_text[18:22]
+                to = message_text[23:]
             thsr_t = tra_time(date,time,od,to)
             item = json.loads(thsr_t)
             mes=" "
