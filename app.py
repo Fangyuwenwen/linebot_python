@@ -485,7 +485,7 @@ def location_message(event):
     u_longitude = event.message.longitude
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=u_latitude+","+u_longitude))      
+    TextSendMessage(text=str(u_latitude)+","+str(u_longitude)))      
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
