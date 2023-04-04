@@ -479,14 +479,13 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
-    else:
-        if event.message.type == 'location':
-            u_latitude = event.message.latitude
-            u_longitude = event.message.longitude
-            line_bot_api.reply_message(
-                event.reply_token,
-            TextSendMessage(text="差一點"))
-            
+@handler.add(MessageEvent, message=LocationMessage)    
+def location_message(event): 
+    u_latitude = event.message.latitude
+    u_longitude = event.message.longitude
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text=u_latitude+","+u_longitude))      
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
