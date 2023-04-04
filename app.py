@@ -474,6 +474,12 @@ def handle_message(event):
                     ]
                 )
             ))
+    elif event.message.type == 'location':
+        u_latitude = event.message.latitude
+        u_longitude = event.message.longitude
+        line_bot_api.reply_message(
+            event.reply_token,
+        TextSendMessage(text="經度: "+u_longitude+"緯度: "+u_latitude))
     else:
         line_bot_api.reply_message(
             event.reply_token,
