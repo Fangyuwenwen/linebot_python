@@ -299,192 +299,194 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message_text = event.message.text
-    if message_text == '溫度':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=tem_value))
-    elif message_text == '濕度':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=hum_value))
-    elif message_text == '圖表':
-        flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
-        line_bot_api.reply_message(
-            event.reply_token,
-            FlexSendMessage('圖表',flexmessage)
-        )
-    elif event.message.type == 'location':
-        u_latitude = event.message.latitude
-        u_longitude = event.message.longitude
-        line_bot_api.reply_message(
-            event.reply_token,
-        TextSendMessage(text="差一點"))
-    elif message_text[:2] == '天氣':
-        city = message_text[3:]
-        city = city.replace('台','臺')
-        if(not (city in cities)):
+    if event.message.type == 'text':
+        message_text = event.message.text
+        if message_text == '溫度':
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="查詢格式為: 天氣 縣市"))
-        else:
-            res = get(city)
-            line_bot_api.reply_message(
-                event.reply_token, TemplateSendMessage(
-                alt_text = city + '未來天氣預測',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
-                            text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
-                                )
-                            ]
-                        )for data in res
-                    ]
-                )
-            ))
-    elif message_text[:2] == '空氣':
-        city = message_text[3:]
-        city = city.replace('台','臺')
-        if(not (city in cities)):
+                TextSendMessage(text=tem_value))
+        elif message_text == '濕度':
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="查詢格式為: 空氣 縣市"))
-        else:
-            msg = city_status(city)
-            line_bot_api.reply_message(
-                event.reply_token, TemplateSendMessage(
-                alt_text = city + '目前空氣品質',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = city+'目前空氣品質',
-                            text = msg,
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = 'https://airtw.epa.gov.tw/'
-                                )
-                            ]
-                        )
-                    ]
-                )
-            ))
-    elif message_text == '雷達':
+                TextSendMessage(text=hum_value))
+        elif message_text == '圖表':
+            flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
             line_bot_api.reply_message(
                 event.reply_token,
-                ImageSendMessage(original_content_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?', preview_image_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?')
-                )
-    elif message_text == '地震':
-        msg=earth_quake()
-        #line_bot_api.push_message('你的 User ID', TextSendMessage(text='Hello World!!!'))
-        line_bot_api.push_message(
-            event.source.user_id,
-            TextSendMessage(text=msg[0])
-        )
-        line_bot_api.reply_message(
-            event.reply_token, 
-            ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
-        )
-    elif message_text == '新聞':
-        now_news=news()
-        item = json.loads(now_news)
-        line_bot_api.reply_message(
-            event.reply_token, TemplateSendMessage(
-            alt_text = '最新熱門新聞',
-            template = CarouselTemplate(
-                columns = [
-                    CarouselColumn(
-                        thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                        title = '最新熱門新聞',
-                        text = '新聞標題:'+i['title'],
-                        actions = [
-                            URIAction(
-                                label = '詳細內容',
-                                uri = i['links']
+                FlexSendMessage('圖表',flexmessage)
+            )
+        elif message_text[:2] == '天氣':
+            city = message_text[3:]
+            city = city.replace('台','臺')
+            if(not (city in cities)):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="查詢格式為: 天氣 縣市"))
+            else:
+                res = get(city)
+                line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = city + '未來天氣預測',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
+                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
+                                actions = [
+                                    URIAction(
+                                        label = '詳細內容',
+                                        uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
+                                    )
+                                ]
+                            )for data in res
+                        ]
+                    )
+                ))
+        elif message_text[:2] == '空氣':
+            city = message_text[3:]
+            city = city.replace('台','臺')
+            if(not (city in cities)):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="查詢格式為: 空氣 縣市"))
+            else:
+                msg = city_status(city)
+                line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = city + '目前空氣品質',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title = city+'目前空氣品質',
+                                text = msg,
+                                actions = [
+                                    URIAction(
+                                        label = '詳細內容',
+                                        uri = 'https://airtw.epa.gov.tw/'
+                                    )
+                                ]
                             )
                         ]
-                    )for i in item
-                ]
+                    )
+                ))
+        elif message_text == '雷達':
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    ImageSendMessage(original_content_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?', preview_image_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?')
+                    )
+        elif message_text == '地震':
+            msg=earth_quake()
+            #line_bot_api.push_message('你的 User ID', TextSendMessage(text='Hello World!!!'))
+            line_bot_api.push_message(
+                event.source.user_id,
+                TextSendMessage(text=msg[0])
             )
-        )
-    )
-    elif message_text[:2] == "高鐵":
-        station = message_text[21:]
-        if(not (station in thsr_city)):
             line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
-        else:
-            date = message_text[2:12]
-            time = message_text[13:18]
-            od = message_text[18:20]
-            to = message_text[21:]
-            thsr_t = thsr_time(date,time,od,to)
-            item = json.loads(thsr_t)
-            mes=" "
-            for i in item:
-                mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
+                event.reply_token, 
+                ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
+            )
+        elif message_text == '新聞':
+            now_news=news()
+            item = json.loads(now_news)
             line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
-        )
-    elif message_text[:2] == "台鐵":
-        if(message_text[2:6]!="2023"):
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="請輸入日期、上車站、下車站 (ex.台鐵2023-03-23 08:00斗六到新左營)"))
-        else:
-            date = message_text[2:12]
-            time = message_text[13:18]
-            if(message_text[18:20] in tra_city):
-                od = message_text[18:20]
-                to = message_text[21:]
-            elif(message_text[18:21] in tra_city):
-                od = message_text[18:21]
-                to = message_text[22:]
-            elif(message_text[18:22] in tra_city):
-                od = message_text[18:22]
-                to = message_text[23:]
-            thsr_t = tra_time(date,time,od,to)
-            item = json.loads(thsr_t)
-            mes=" "
-            for i in item:
-                mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
-            line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
-    )
-    elif message_text == "停車位":
-        line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
-                alt_text = '請傳送目前位置',
+                alt_text = '最新熱門新聞',
                 template = CarouselTemplate(
                     columns = [
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            text = "請傳送目前位置",
+                            title = '最新熱門新聞',
+                            text = '新聞標題:'+i['title'],
                             actions = [
                                 URIAction(
-                                    label = '傳送位置',
-                                    uri = 'https://line.me/R/nv/location/'
+                                    label = '詳細內容',
+                                    uri = i['links']
                                 )
                             ]
-                        )
+                        )for i in item
                     ]
                 )
-            ))
+            )
+        )
+        elif message_text[:2] == "高鐵":
+            station = message_text[21:]
+            if(not (station in thsr_city)):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
+            else:
+                date = message_text[2:12]
+                time = message_text[13:18]
+                od = message_text[18:20]
+                to = message_text[21:]
+                thsr_t = thsr_time(date,time,od,to)
+                item = json.loads(thsr_t)
+                mes=" "
+                for i in item:
+                    mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
+                line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
+            )
+        elif message_text[:2] == "台鐵":
+            if(message_text[2:6]!="2023"):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="請輸入日期、上車站、下車站 (ex.台鐵2023-03-23 08:00斗六到新左營)"))
+            else:
+                date = message_text[2:12]
+                time = message_text[13:18]
+                if(message_text[18:20] in tra_city):
+                    od = message_text[18:20]
+                    to = message_text[21:]
+                elif(message_text[18:21] in tra_city):
+                    od = message_text[18:21]
+                    to = message_text[22:]
+                elif(message_text[18:22] in tra_city):
+                    od = message_text[18:22]
+                    to = message_text[23:]
+                thsr_t = tra_time(date,time,od,to)
+                item = json.loads(thsr_t)
+                mes=" "
+                for i in item:
+                    mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
+                line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
+        )
+        elif message_text == "停車位":
+            line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '請傳送目前位置',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                text = "請傳送目前位置",
+                                actions = [
+                                    URIAction(
+                                        label = '傳送位置',
+                                        uri = 'https://line.me/R/nv/location/'
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ))
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text='請輸入正確關鍵字'))
     else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='請輸入正確關鍵字'))
-
+        if event.message.type == 'location':
+            u_latitude = event.message.latitude
+            u_longitude = event.message.longitude
+            line_bot_api.reply_message(
+                event.reply_token,
+            TextSendMessage(text="差一點"))
+            
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
