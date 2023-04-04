@@ -458,12 +458,11 @@ def handle_message(event):
     elif message_text == "停車位":
         line_bot_api.reply_message(
                 event.reply_token, TemplateSendMessage(
-                alt_text = city + '目前空氣品質',
+                alt_text = '請傳送目前位置',
                 template = CarouselTemplate(
                     columns = [
                         CarouselColumn(
                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '請傳送目前位置',
                             text = "請傳送目前位置",
                             actions = [
                                 URIAction(
