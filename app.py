@@ -487,8 +487,8 @@ def location_message(event):
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
     endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+u_longitude+"/"
-    LocationY = "LocationY/"+u_latitude
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     CarParkings = []
