@@ -519,7 +519,7 @@ def location_message(event):
                             actions = [
                                 URIAction(
                                     label = '詳細內容',
-                                    uri = "..."
+                                    uri = "https://www.google.com.tw/?hl=zh_TW"
                                 )
                             ]
                         )for i in title
