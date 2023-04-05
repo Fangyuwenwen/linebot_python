@@ -481,11 +481,51 @@ def handle_message(event):
                 TextSendMessage(text='請輸入正確關鍵字'))
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
+    tdx = TDX(client_id, client_secret)
     u_latitude = event.message.latitude
     u_longitude = event.message.longitude
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+u_longitude+"/"
+    LocationY = "LocationY/"+u_latitude
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    CarParkings = []
+    ScenicSpots = []
+    Hotels = []
+    Restaurants = []
+    RailStations = []
+    BusStations = []
+    BikeStations = []
+    for i in response :
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
+    title=["停車位資訊","景點資訊","住宿資訊","餐廳資訊","鐵路資訊","公車資訊","公共腳踏車資訊"]
     line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text=str(u_latitude)+","+str(u_longitude)))      
+        event.reply_token,TemplateSendMessage(
+                alt_text = '附近交通及觀光資訊一覽',
+                template = CarouselTemplate(
+                    columns = [
+                        CarouselColumn(
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            title = '附近交通及觀光資訊一覽',
+                            text = i,
+                            actions = [
+                                URIAction(
+                                    label = '詳細內容',
+                                    uri = "..."
+                                )
+                            ]
+                        )for i in title
+                    ]
+                )
+            ))    
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
