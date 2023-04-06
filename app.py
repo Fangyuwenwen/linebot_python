@@ -552,7 +552,7 @@ def location_message(event):
                 )
             )
         )
-    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    #return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
     
 @handler.add(PostbackEvent)
 def post_message(event):
