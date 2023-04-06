@@ -481,6 +481,52 @@ def handle_message(event):
                 TextSendMessage(text='請輸入正確關鍵字'))
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
+    line_bot_api.reply_message(
+    event.reply_token,TemplateSendMessage(
+            alt_text = '附近交通及觀光資訊一覽',
+            template = ButtonsTemplate(
+                title="附近交通及觀光資訊一覽",
+                text="請選擇想要查詢的資訊",
+                actions=[
+                    PostbackTemplateAction(
+                        label="停車位",
+                        text="附近停車位資訊",
+                        data="停車位資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="觀光景點",
+                        text="附近觀光景點資訊",
+                        data="觀光景點資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="住宿",
+                        text="附近住宿資訊",
+                        data="住宿資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="餐廳",
+                        text="附近餐廳資訊",
+                        data="餐廳資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="鐵路",
+                        text="附近鐵路資訊",
+                        data="鐵路資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="公車",
+                        text="附近公車資訊",
+                        data="公車資訊"
+                    ),
+                    PostbackTemplateAction(
+                        label="腳踏車",
+                        text="附近公共腳踏車資訊",
+                        data="腳踏車資訊"
+                    )
+                ]
+            )
+        )
+    )
     tdx = TDX(client_id, client_secret)
     u_latitude = event.message.latitude
     u_longitude = event.message.longitude
@@ -506,52 +552,6 @@ def location_message(event):
         RailStations.append(i["RailStations"]["RailStationList"])
         BusStations.append(i["BusStations"]["BusStationList"])
         BikeStations.append(i["BikeStations"]["BikeStationList"])
-    line_bot_api.reply_message(
-        event.reply_token,TemplateSendMessage(
-                alt_text = '附近交通及觀光資訊一覽',
-                template = ButtonsTemplate(
-                    title="附近交通及觀光資訊一覽",
-                    text="請選擇想要查詢的資訊",
-                    actions=[
-                        PostbackTemplateAction(
-                            label="停車位",
-                            text="附近停車位資訊",
-                            data="停車位資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="觀光景點",
-                            text="附近觀光景點資訊",
-                            data="觀光景點資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="住宿",
-                            text="附近住宿資訊",
-                            data="住宿資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="餐廳",
-                            text="附近餐廳資訊",
-                            data="餐廳資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="鐵路",
-                            text="附近鐵路資訊",
-                            data="鐵路資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="公車",
-                            text="附近公車資訊",
-                            data="公車資訊"
-                        ),
-                        PostbackTemplateAction(
-                            label="腳踏車",
-                            text="附近公共腳踏車資訊",
-                            data="腳踏車資訊"
-                        )
-                    ]
-                )
-            )
-        )
     return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
     
 @handler.add(PostbackEvent)
