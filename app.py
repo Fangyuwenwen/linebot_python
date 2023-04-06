@@ -40,7 +40,7 @@ from linebot.models import (
     FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
     TextComponent, IconComponent, ButtonComponent,
     SeparatorComponent, QuickReply, QuickReplyButton,
-    ImageSendMessage)
+    ImageSendMessage,PostbackTemplateAction)
 
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
@@ -506,26 +506,66 @@ def location_message(event):
         RailStations.append(i["RailStations"]["RailStationList"])
         BusStations.append(i["BusStations"]["BusStationList"])
         BikeStations.append(i["BikeStations"]["BikeStationList"])
-    title=["停車位資訊","景點資訊","住宿資訊","餐廳資訊","鐵路資訊","公車資訊","公共腳踏車資訊"]
     line_bot_api.reply_message(
         event.reply_token,TemplateSendMessage(
                 alt_text = '附近交通及觀光資訊一覽',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title = '附近交通及觀光資訊一覽',
-                            text = i,
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = "https://www.google.com.tw/?hl=zh_TW"
-                                )
-                            ]
-                        )for i in title
+                template = ButtonsTemplate(
+                    title="附近交通及觀光資訊一覽",
+                    texte="請選擇想要查詢的資訊",
+                    actions=[
+                        PostbackTemplateAction(
+                            label="停車位",
+                            text="附近停車位資訊",
+                            data="停車位資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="觀光景點",
+                            text="附近觀光景點資訊",
+                            data="觀光景點資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="住宿",
+                            text="附近住宿資訊",
+                            data="住宿資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="餐廳",
+                            text="附近餐廳資訊",
+                            data="餐廳資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="鐵路",
+                            text="附近鐵路資訊",
+                            data="鐵路資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="公車",
+                            text="附近公車資訊",
+                            data="公車資訊"
+                        ),
+                        PostbackTemplateAction(
+                            label="腳踏車",
+                            text="附近公共腳踏車資訊",
+                            data="腳踏車資訊"
+                        )
                     ]
                 )
-            ))    
+            )
+        )
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    
+@handler.add(PostbackEvent)
+def post_message(event):
+    car,scen,hote,rest,rail,bus,bike=location_message()
+    if event.postback.data == "停車位資訊":
+        c=[]
+        for i in car:
+            for j in i :
+                c+=j
+        line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
+            
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
