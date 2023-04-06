@@ -530,11 +530,6 @@ def location_message(event):
                                     label="住宿",
                                     text="附近住宿資訊",
                                     data="住宿資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="餐廳",
-                                    text="附近餐廳資訊",
-                                    data="餐廳資訊"
                                 )
                             ]
                         ),
@@ -557,6 +552,18 @@ def location_message(event):
                                     label="腳踏車",
                                     text="附近公共腳踏車資訊",
                                     data="腳踏車資訊"
+                                )
+                            ]
+                        ),
+                        CarouselColumn(
+                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            title="附近交通及觀光資訊一覽",
+                            text="請選擇想要查詢的資訊",
+                            actions=[
+                                PostbackTemplateAction(
+                                    label="餐廳",
+                                    text="附近餐廳資訊",
+                                    data="餐廳資訊"
                                 )
                             ]
                         )
