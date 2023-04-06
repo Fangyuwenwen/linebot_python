@@ -511,7 +511,7 @@ def location_message(event):
                 alt_text = '附近交通及觀光資訊一覽',
                 template = ButtonsTemplate(
                     title="附近交通及觀光資訊一覽",
-                    texte="請選擇想要查詢的資訊",
+                    text="請選擇想要查詢的資訊",
                     actions=[
                         PostbackTemplateAction(
                             label="停車位",
@@ -552,7 +552,7 @@ def location_message(event):
                 )
             )
         )
-    #return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
     
 @handler.add(PostbackEvent)
 def post_message(event):
