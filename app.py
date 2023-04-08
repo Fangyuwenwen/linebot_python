@@ -30,7 +30,7 @@ from linebot.models import (
     SourceUser, SourceGroup, SourceRoom,
     TemplateSendMessage, ConfirmTemplate, MessageAction,
     ButtonsTemplate, ImageCarouselTemplate, ImageCarouselColumn, URIAction,
-    PostbackAction, DatetimePickerAction,
+    PostbackAction, DatetimePickerAction,MessageTemplateAction,
     CameraAction, CameraRollAction, LocationAction,
     CarouselTemplate, CarouselColumn, PostbackEvent,
     StickerMessage, StickerSendMessage, LocationMessage, LocationSendMessage,
@@ -574,6 +574,14 @@ def location_message(event):
                                         label="餐廳資訊",
                                         text="附近餐廳資訊",
                                         data="餐廳資訊"
+                                    ),
+                                    URIAction(
+                                        label = '開啟地圖',
+                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
+                                    ),
+                                    MessageTemplateAction(
+                                        label='結束使用',
+                                        text='查詢結束'
                                 )
                             ]
                         )            
