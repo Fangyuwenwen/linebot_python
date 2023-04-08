@@ -486,7 +486,7 @@ def handle_message(event):
                     )
                 )
             )
-        elif message_text == "停車位資訊" :
+        elif message_text == "附近停車位資訊" :
             car,scen,hote,rest,rail,bus,bike=location_message()
             c=[]
             for i in car:
