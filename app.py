@@ -481,31 +481,6 @@ def handle_message(event):
                 TextSendMessage(text='請輸入正確關鍵字'))
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
-    tdx = TDX(client_id, client_secret)
-    u_latitude = event.message.latitude
-    u_longitude = event.message.longitude
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    CarParkings = []
-    ScenicSpots = []
-    Hotels = []
-    Restaurants = []
-    RailStations = []
-    BusStations = []
-    BikeStations = []
-    for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
         event.reply_token,TemplateSendMessage(
                 alt_text = '附近交通及觀光資訊一覽',
@@ -571,7 +546,32 @@ def location_message(event):
                 )
             )
         )
-    #return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    tdx = TDX(client_id, client_secret)
+    u_latitude = event.message.latitude
+    u_longitude = event.message.longitude
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    CarParkings = []
+    ScenicSpots = []
+    Hotels = []
+    Restaurants = []
+    RailStations = []
+    BusStations = []
+    BikeStations = []
+    for i in response :
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
     
 @handler.add(PostbackEvent)
 def post_message(event):
