@@ -532,6 +532,7 @@ def get_location(event):
                                 actions = [
                                     PostbackTemplateAction(
                                     label="停車位資訊",
+                                    text="附近停車位資訊",
                                     data="停車位資訊"
                                     ),
                                     PostbackTemplateAction(
