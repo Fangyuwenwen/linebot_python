@@ -484,7 +484,17 @@ def handle_message(event):
                             )
                         ]
                     )
-                ))
+                )
+            )
+        elif message_text == "停車位資訊" :
+            car,scen,hote,rest,rail,bus,bike=location_message()
+            c=[]
+            for i in car:
+                for j in i :
+                    c+=j
+            line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
