@@ -481,7 +481,82 @@ def handle_message(event):
                 TextSendMessage(text='請輸入正確關鍵字'))
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
+    tdx = TDX(client_id, client_secret)
+    u_latitude = event.message.latitude
+    u_longitude = event.message.longitude
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    CarParkings = []
+    ScenicSpots = []
+    Hotels = []
+    Restaurants = []
+    RailStations = []
+    BusStations = []
+    BikeStations = []
+    for i in response :
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '請傳送目前位置',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                text = "請傳送目前位置",
+                                actions = [
+                                    URIAction(
+                                        label = '傳送位置',
+                                        uri = 'https://developers.line.biz/en/reference/messaging-api/#template-messages'
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                )
+            )
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    
+@handler.add(PostbackEvent)
+def post_message(event):
+    car,scen,hote,rest,rail,bus,bike=location_message()
+    if event.postback.data == "停車位資訊":
+        c=[]
+        for i in car:
+            for j in i :
+                c+=j
+        line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
+            
+@app.route('/static/<path:path>')
+def send_static_content(path):
+    return send_from_directory('static', path)
+
+
+if __name__ == "__main__":
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    # create tmp dir for download content
+    make_static_tmp_dir()
+    
+    app.run(debug=options.debug, port=options.port)
+    """line_bot_api.reply_message(
         event.reply_token,TemplateSendMessage(
                 alt_text = '附近交通及觀光資訊一覽',
                 template = CarouselTemplate(
@@ -546,59 +621,4 @@ def location_message(event):
                 )
             )
         )
-    tdx = TDX(client_id, client_secret)
-    u_latitude = event.message.latitude
-    u_longitude = event.message.longitude
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    CarParkings = []
-    ScenicSpots = []
-    Hotels = []
-    Restaurants = []
-    RailStations = []
-    BusStations = []
-    BikeStations = []
-    for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
-    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
-    
-@handler.add(PostbackEvent)
-def post_message(event):
-    car,scen,hote,rest,rail,bus,bike=location_message()
-    if event.postback.data == "停車位資訊":
-        c=[]
-        for i in car:
-            for j in i :
-                c+=j
-        line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
-            
-@app.route('/static/<path:path>')
-def send_static_content(path):
-    return send_from_directory('static', path)
-
-
-if __name__ == "__main__":
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
-
-    # create tmp dir for download content
-    make_static_tmp_dir()
-    
-    app.run(debug=options.debug, port=options.port)
+    """
