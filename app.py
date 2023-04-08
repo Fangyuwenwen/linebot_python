@@ -296,7 +296,7 @@ def callback():
         abort(400)
 
     return 'OK'
-@handler.add(PostbackEvent)
+"""@handler.add(PostbackEvent)
 def post_message(event):
     car,scen,hote,rest,rail,bus,bike=location_message()
     if event.postback.data == "停車位資訊":
@@ -306,7 +306,7 @@ def post_message(event):
                 c+=j
         line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
+                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))"""
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.type == 'text':
