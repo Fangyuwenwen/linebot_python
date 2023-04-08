@@ -296,7 +296,17 @@ def callback():
         abort(400)
 
     return 'OK'
-
+@handler.add(PostbackEvent)
+def post_message(event):
+    car,scen,hote,rest,rail,bus,bike=location_message()
+    if event.postback.data == "停車位資訊":
+        c=[]
+        for i in car:
+            for j in i :
+                c+=j
+        line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.type == 'text':
@@ -517,7 +527,7 @@ def location_message(event):
                                 text="請選擇想要查詢的資訊",
                                 actions = [
                                     PostbackTemplateAction(
-                                    label="停車位",
+                                    label="停車位資訊",
                                     text="附近停車位資訊",
                                     data="停車位資訊"
                                     )
@@ -528,18 +538,6 @@ def location_message(event):
                 )
             )
     return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
-    
-@handler.add(PostbackEvent)
-def post_message(event):
-    car,scen,hote,rest,rail,bus,bike=location_message()
-    if event.postback.data == "停車位資訊":
-        c=[]
-        for i in car:
-            for j in i :
-                c+=j
-        line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
             
 @app.route('/static/<path:path>')
 def send_static_content(path):
