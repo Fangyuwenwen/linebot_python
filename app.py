@@ -508,16 +508,18 @@ def location_message(event):
         BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
-                    alt_text = '請傳送目前位置',
+                    alt_text = '附近交通及觀光資訊一覽',
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                text = "請傳送目前位置",
+                                title="附近交通及觀光資訊一覽",
+                                text="請選擇想要查詢的資訊",
                                 actions = [
-                                    URIAction(
-                                        label = '傳送位置',
-                                        uri = 'https://developers.line.biz/en/reference/messaging-api/#template-messages'
+                                    PostbackTemplateAction(
+                                    label="停車位",
+                                    text="附近停車位資訊",
+                                    data="停車位資訊"
                                     )
                                 ]
                             )
