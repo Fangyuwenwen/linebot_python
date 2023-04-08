@@ -265,7 +265,7 @@ def tra_time(u_date,u_time,u_od,u_to):
     return(js)
 
 #取得旅遊資訊
-def location_message(u_latitude,u_longitude): 
+def location_message(): 
     u_latitude,u_longitude=get_location()
     tdx = TDX(client_id, client_secret)
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
