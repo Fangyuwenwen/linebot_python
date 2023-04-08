@@ -486,10 +486,9 @@ def handle_message(event):
                     )
                 )
             )
-        elif message_text == "附近停車位資訊" :
-            car,scen,hote,rest,rail,bus,bike=location_message()
+        elif message_text == "附近停車位資訊" :         
             c=[]
-            for i in car:
+            for i in CarParkings:
                 for j in i :
                     c+=j
             line_bot_api.reply_message(
@@ -499,6 +498,15 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
+            
+CarParkings = []
+ScenicSpots = []
+Hotels = []
+Restaurants = []
+RailStations = []
+BusStations = []
+BikeStations = []
+
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
     tdx = TDX(client_id, client_secret)
@@ -511,13 +519,6 @@ def location_message(event):
     LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
-    CarParkings = []
-    ScenicSpots = []
-    Hotels = []
-    Restaurants = []
-    RailStations = []
-    BusStations = []
-    BikeStations = []
     for i in response :
         CarParkings.append(i["CarParkings"]["CarParkingList"])
         ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
@@ -599,7 +600,6 @@ def location_message(event):
                 )
             )
         )
-    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
             
 @app.route('/static/<path:path>')
 def send_static_content(path):
