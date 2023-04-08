@@ -564,7 +564,19 @@ def location_message(event):
                                         data="腳踏車資訊"
                                 )
                             ]
-                        )        
+                        ),
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title="附近交通及觀光資訊一覽",
+                                text="請選擇想要查詢的資訊",
+                                actions=[
+                                    PostbackTemplateAction(
+                                        label="餐廳資訊",
+                                        text="附近餐廳資訊",
+                                        data="餐廳資訊"
+                                )
+                            ]
+                        )            
                     ]
                 )
             )
