@@ -264,6 +264,33 @@ def tra_time(u_date,u_time,u_od,u_to):
     js = df.to_json(orient = 'records',force_ascii=False)
     return(js)
 
+#取得旅遊資訊
+def location_message(u_latitude,u_longitude): 
+    u_latitude,u_longitude=get_location()
+    tdx = TDX(client_id, client_secret)
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    CarParkings = []
+    ScenicSpots = []
+    Hotels = []
+    Restaurants = []
+    RailStations = []
+    BusStations = []
+    BikeStations = []
+    for i in response :
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -296,17 +323,7 @@ def callback():
         abort(400)
 
     return 'OK'
-"""@handler.add(PostbackEvent)
-def post_message(event):
-    car,scen,hote,rest,rail,bus,bike=location_message()
-    if event.postback.data == "停車位資訊":
-        c=[]
-        for i in car:
-            for j in i :
-                c+=j
-        line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))"""
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.type == 'text':
@@ -486,37 +503,23 @@ def handle_message(event):
                     )
                 )
             )
+        elif message_text == "附近停車位資訊" :
+            car,scen,hote,rest,rail,bus,bike=location_message()
+            c=[]
+            for i in car:
+                for j in i :
+                    c+=j
+            line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
 @handler.add(MessageEvent, message=LocationMessage)    
-def location_message(event): 
-    tdx = TDX(client_id, client_secret)
+def get_location(event):
     u_latitude = event.message.latitude
     u_longitude = event.message.longitude
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    CarParkings = []
-    ScenicSpots = []
-    Hotels = []
-    Restaurants = []
-    RailStations = []
-    BusStations = []
-    BikeStations = []
-    for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
@@ -589,16 +592,7 @@ def location_message(event):
                 )
             )
         )
-    if event.postback.data == "停車位資訊" :
-        c=[]
-        for i in CarParkings:
-            for j in i :
-                c+=j
-        line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n")
-        )           
-            
+    return u_latitude,u_longitude
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
@@ -616,12 +610,3 @@ if __name__ == "__main__":
     make_static_tmp_dir()
     
     app.run(debug=options.debug, port=options.port)
-"""elif message_text == "附近停車位資訊" :
-    car,scen,hote,rest,rail,bus,bike=location_message()
-    c=[]
-    for i in car:
-        for j in i :
-            c+=j
-    line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))"""
