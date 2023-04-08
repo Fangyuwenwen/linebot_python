@@ -486,27 +486,10 @@ def handle_message(event):
                     )
                 )
             )
-        elif message_text == "附近停車位資訊" :         
-            c=[]
-            for i in CarParkings:
-                for j in i :
-                    c+=j
-            line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
-            
-CarParkings = []
-ScenicSpots = []
-Hotels = []
-Restaurants = []
-RailStations = []
-BusStations = []
-BikeStations = []
-
 @handler.add(MessageEvent, message=LocationMessage)    
 def location_message(event): 
     tdx = TDX(client_id, client_secret)
@@ -519,6 +502,13 @@ def location_message(event):
     LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
+    CarParkings = []
+    ScenicSpots = []
+    Hotels = []
+    Restaurants = []
+    RailStations = []
+    BusStations = []
+    BikeStations = []
     for i in response :
         CarParkings.append(i["CarParkings"]["CarParkingList"])
         ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
@@ -539,7 +529,6 @@ def location_message(event):
                                 actions = [
                                     PostbackTemplateAction(
                                     label="停車位資訊",
-                                    text="附近停車位資訊",
                                     data="停車位資訊"
                                     ),
                                     PostbackTemplateAction(
@@ -600,6 +589,15 @@ def location_message(event):
                 )
             )
         )
+    if event.postback.data == "停車位資訊" :
+        c=[]
+        for i in CarParkings:
+            for j in i :
+                c+=j
+        line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n")
+        )           
             
 @app.route('/static/<path:path>')
 def send_static_content(path):
@@ -618,69 +616,12 @@ if __name__ == "__main__":
     make_static_tmp_dir()
     
     app.run(debug=options.debug, port=options.port)
-    """line_bot_api.reply_message(
-        event.reply_token,TemplateSendMessage(
-                alt_text = '附近交通及觀光資訊一覽',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title="附近交通及觀光資訊一覽",
-                            text="請選擇想要查詢的資訊",
-                            actions=[
-                                PostbackTemplateAction(
-                                    label="停車位",
-                                    text="附近停車位資訊",
-                                    data="停車位資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="觀光景點",
-                                    text="附近觀光景點資訊",
-                                    data="觀光景點資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="住宿",
-                                    text="附近住宿資訊",
-                                    data="住宿資訊"
-                                )
-                            ]
-                        ),
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title="附近交通及觀光資訊一覽",
-                            text="請選擇想要查詢的資訊",
-                            actions=[
-                                PostbackTemplateAction(
-                                    label="鐵路",
-                                    text="附近鐵路資訊",
-                                    data="鐵路資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="公車",
-                                    text="附近公車資訊",
-                                    data="公車資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="腳踏車",
-                                    text="附近公共腳踏車資訊",
-                                    data="腳踏車資訊"
-                                )
-                            ]
-                        ),
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                            title="附近交通及觀光資訊一覽",
-                            text="請選擇想要查詢的資訊",
-                            actions=[
-                                PostbackTemplateAction(
-                                    label="餐廳",
-                                    text="附近餐廳資訊",
-                                    data="餐廳資訊"
-                                )
-                            ]
-                        )
-                    ]
-                )
-            )
-        )
-    """
+"""elif message_text == "附近停車位資訊" :
+    car,scen,hote,rest,rail,bus,bike=location_message()
+    c=[]
+    for i in car:
+        for j in i :
+            c+=j
+    line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))"""
