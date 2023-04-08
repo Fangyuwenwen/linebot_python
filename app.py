@@ -493,7 +493,7 @@ def handle_message(event):
                     c+=j
             line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="附近停車位資訊"+"\n"+j+"\n"))
+                    TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
