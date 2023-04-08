@@ -530,13 +530,23 @@ def location_message(event):
                                     label="停車位資訊",
                                     text="附近停車位資訊",
                                     data="停車位資訊"
-                                    )
-                                ]
-                            )
-                        ]
-                    )
+                                    ),
+                                    PostbackTemplateAction(
+                                    label="觀光景點資訊",
+                                    text="附近觀光景點資訊",
+                                    data="觀光景點資訊"
+                                ),
+                                PostbackTemplateAction(
+                                    label="住宿資訊",
+                                    text="附近住宿資訊",
+                                    data="住宿資訊"
+                                )
+                            ]
+                        )
+                    ]
                 )
             )
+        )
     return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
             
 @app.route('/static/<path:path>')
