@@ -267,10 +267,11 @@ def tra_time(u_date,u_time,u_od,u_to):
 #取得旅遊資訊
 def location_message(): 
     tdx = TDX(client_id, client_secret)
+    u_latitude,u_longitude=get_location()
     #u_latitude = "23.70393"
     #u_longitude = "120.42887"
-    u_latitude = "24.10887"
-    u_longitude =  "120.62545"
+    #u_latitude = "24.10887"
+    #u_longitude =  "120.62545"
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
     endpoint = "/Distance/500?%24format=JSON"
@@ -610,11 +611,11 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
  
- 
 @handler.add(MessageEvent, message=LocationMessage)    
 def get_location(event):
     u_latitude = "event.message.latitude"
     u_longitude = "event.message.longitude"
+
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
@@ -688,6 +689,7 @@ def get_location(event):
                 )
             )
         )
+    return u_latitude,u_longitude
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
