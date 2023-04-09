@@ -527,14 +527,14 @@ def handle_message(event):
             for i in scen:
                 for j in i :
                     mes+=j['ScenicSpotName']+"\n"
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近觀光景點資訊"+"\n"+mes))
+                            TextSendMessage(text="附近觀光景點資訊"+"\n"+mes))
         elif message_text == "附近住宿資訊" :
             mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
@@ -553,72 +553,68 @@ def handle_message(event):
             mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in rest:
-                mes+=j['RestaurantName']+"\n"
                 for j in i :
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                    mes+=j['RestaurantName']+"\n"
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近餐廳資訊"+"\n"+mes))
+                            TextSendMessage(text="附近餐廳資訊"+"\n"+mes))
         elif message_text == "附近鐵路資訊" :
             mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in rail:
                 for j in i :
                     mes+=j['StationName']+"\n"
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近鐵路資訊"+"\n"+mes))
+                            TextSendMessage(text="附近鐵路資訊"+"\n"+mes))
         elif message_text == "附近公車資訊" :
             mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in bus:
                 for j in i :
                     mes+=j['StopName']+"\n"
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近公車資訊"+"\n"+mes))
+                            TextSendMessage(text="附近公車資訊"+"\n"+mes))
         elif message_text == "附近公共腳踏車資訊" :
             mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in bike:
                 for j in i :
-                    mes+=j['StopName']+"\n"
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                    mes+=j['StationName']+"\n"
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近公共腳踏車資訊"+"\n"+mes))
+                            TextSendMessage(text="附近公共腳踏車資訊"+"\n"+mes))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
  
-u_latitude=" "
-u_longitude=" "
  
 @handler.add(MessageEvent, message=LocationMessage)    
 def get_location(event):
-    latitude = event.message.latitude
-    longitude = event.message.longitude
-    u_latitude = latitude
-    u_longitude = longitude
+    u_latitude = "event.message.latitude"
+    u_longitude = "event.message.longitude"
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
