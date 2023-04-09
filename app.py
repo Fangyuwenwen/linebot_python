@@ -272,8 +272,8 @@ def location_message():
     endpoint = "/Distance/500?%24format=JSON"
     #LocationX = "LocationX/"+str(u_longitude)+"/"
     #LocationY = "LocationY/"+str(u_latitude)
-    LocationX = "LocationX/"+"24.10887"+"/"
-    LocationY = "LocationY/"+"120.62545"
+    LocationY = "LocationX/"+"24.10887"+"/"
+    LocationX = "LocationY/"+"120.62545"
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     CarParkings = []
