@@ -510,7 +510,7 @@ def handle_message(event):
             c=[]
             for i in car:
                 for j in i :
-                    c+=j
+                    c+=j['CarParkName']
             line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
@@ -524,8 +524,10 @@ u_longitude=" "
  
 @handler.add(MessageEvent, message=LocationMessage)    
 def get_location(event):
-    u_latitude = event.message.latitude
-    u_longitude = event.message.longitude
+    latitude = event.message.latitude
+    longitude = event.message.longitude
+    u_latitude = latitude
+    u_longitude = longitude
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
