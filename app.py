@@ -270,8 +270,10 @@ def location_message():
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
     endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
+    #LocationX = "LocationX/"+str(u_longitude)+"/"
+    #LocationY = "LocationY/"+str(u_latitude)
+    LocationX = "LocationX/"+"24.10887"+"/"
+    LocationY = "LocationY/"+"120.62545"
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     CarParkings = []
@@ -482,6 +484,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
         )
+                
         elif message_text == "停車位":
             line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
