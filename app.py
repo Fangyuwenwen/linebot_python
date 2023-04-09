@@ -537,14 +537,14 @@ def handle_message(event):
             for i in hote:
                 for j in i :
                     mes+=j['HotelName']
-                    if mes == " ":
-                        line_bot_api.reply_message(
+                if mes == " ":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="找不到相關資訊"))
+                else:
+                    line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="找不到相關資訊"))
-                    else:
-                        line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="附近住宿資訊"+"\n"+mes+"\n"))
+                            TextSendMessage(text="附近住宿資訊"+"\n"+mes+"\n"))
         elif message_text == "附近餐廳資訊" :
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in rest:
