@@ -267,13 +267,15 @@ def tra_time(u_date,u_time,u_od,u_to):
 #取得旅遊資訊
 def location_message(): 
     tdx = TDX(client_id, client_secret)
+    #u_latitude = "23.70393"
+    #u_longitude = "120.42887"
+    u_latitude = "24.10887"
+    u_longitude =  "120.62545"
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
     endpoint = "/Distance/500?%24format=JSON"
-    #LocationX = "LocationX/"+str(u_longitude)+"/"
-    #LocationY = "LocationY/"+str(u_latitude)
-    LocationY = "LocationX/"+"24.10887"+"/"
-    LocationX = "LocationY/"+"120.62545"
+    LocationX = "LocationX/"+u_longitude+"/"
+    LocationY = "LocationY/"+u_latitude
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     CarParkings = []
