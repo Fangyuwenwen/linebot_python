@@ -507,11 +507,11 @@ def handle_message(event):
             )
         elif message_text == "附近停車位資訊" :
             car,scen,hote,rest,rail,bus,bike=location_message()
-            c=[]
+            c=" "
             for i in car:
                 for j in i :
                     c+=j['CarParkName']
-            if c[:1] == " ":
+            if c == " ":
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text="找不到相關資訊"))
