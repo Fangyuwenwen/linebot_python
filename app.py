@@ -511,9 +511,14 @@ def handle_message(event):
             for i in car:
                 for j in i :
                     c+=j['CarParkName']
-            line_bot_api.reply_message(
+            if c[:1] == " ":
+                line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
+                    TextSendMessage(text="找不到相關資訊"))
+            else:
+                line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="附近停車位資訊"+"\n"+c+"\n"))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
