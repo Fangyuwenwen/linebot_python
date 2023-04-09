@@ -532,17 +532,19 @@ def handle_message(event):
                                 event.reply_token,
                                 TextSendMessage(text="附近觀光景點資訊"+"\n"+j['ScenicSpotName']+"\n"))
         elif message_text == "附近住宿資訊" :
+            mes=" "
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in hote:
                 for j in i :
-                    if j['HotelName'] == " ":
+                    mes+=j['HotelName']
+                    if mes == " ":
                         line_bot_api.reply_message(
                             event.reply_token,
                             TextSendMessage(text="找不到相關資訊"))
                     else:
                         line_bot_api.reply_message(
                                 event.reply_token,
-                                TextSendMessage(text="附近住宿資訊"+"\n"+j['HotelName']+"\n"))
+                                TextSendMessage(text="附近住宿資訊"+"\n"+mes+"\n"))
         elif message_text == "附近餐廳資訊" :
             car,scen,hote,rest,rail,bus,bike=location_message()
             for i in rest:
