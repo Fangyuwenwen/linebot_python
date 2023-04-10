@@ -265,9 +265,8 @@ def tra_time(u_date,u_time,u_od,u_to):
     return(js)
 
 #取得旅遊資訊
-def location_message(): 
+"""def location_message(): 
     tdx = TDX(client_id, client_secret)
-    u_latitude,u_longitude=get_location()
     #u_latitude = "23.70393"
     #u_longitude = "120.42887"
     #u_latitude = "24.10887"
@@ -294,7 +293,7 @@ def location_message():
         RailStations.append(i["RailStations"]["RailStationList"])
         BusStations.append(i["BusStations"]["BusStationList"])
         BikeStations.append(i["BikeStations"]["BikeStationList"])
-    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations
+    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations"""
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -510,8 +509,8 @@ def handle_message(event):
             )
         elif message_text == "附近停車位資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in car:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in CarParkings:
                 for j in i :
                     mes+=j['CarParkName']+"\n"
                 if mes == " ":
@@ -524,8 +523,8 @@ def handle_message(event):
                             TextSendMessage(text="附近停車位資訊:"+"\n"+mes))
         elif message_text == "附近觀光景點資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in scen:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in ScenicSpots:
                 for j in i :
                     mes+=j['ScenicSpotName']+"\n"
                 if mes == " ":
@@ -538,8 +537,8 @@ def handle_message(event):
                             TextSendMessage(text="附近觀光景點資訊"+"\n"+mes))
         elif message_text == "附近住宿資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in hote:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in Hotels:
                 for j in i :
                     mes+=j['HotelName']+"\n"
                 if mes == " ":
@@ -552,8 +551,8 @@ def handle_message(event):
                             TextSendMessage(text="附近住宿資訊"+"\n"+mes))
         elif message_text == "附近餐廳資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in rest:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in Restaurants:
                 for j in i :
                     mes+=j['RestaurantName']+"\n"
                 if mes == " ":
@@ -566,8 +565,8 @@ def handle_message(event):
                             TextSendMessage(text="附近餐廳資訊"+"\n"+mes))
         elif message_text == "附近鐵路資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in rail:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in RailStations:
                 for j in i :
                     mes+=j['StationName']+"\n"
                 if mes == " ":
@@ -580,8 +579,8 @@ def handle_message(event):
                             TextSendMessage(text="附近鐵路資訊"+"\n"+mes))
         elif message_text == "附近公車資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in bus:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in BusStations:
                 for j in i :
                     mes+=j['StopName']+"\n"
                 if mes == " ":
@@ -594,8 +593,8 @@ def handle_message(event):
                             TextSendMessage(text="附近公車資訊"+"\n"+mes))
         elif message_text == "附近公共腳踏車資訊" :
             mes=" "
-            car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in bike:
+            #car,scen,hote,rest,rail,bus,bike=location_message()
+            for i in BikeStations:
                 for j in i :
                     mes+=j['StationName']+"\n"
                 if mes == " ":
@@ -610,12 +609,39 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
- 
+
+CarParkings = []
+ScenicSpots = []
+Hotels = []
+Restaurants = []
+RailStations = []
+BusStations = []
+BikeStations = []
+    
 @handler.add(MessageEvent, message=LocationMessage)    
 def get_location(event):
     u_latitude = "event.message.latitude"
     u_longitude = "event.message.longitude"
-
+    tdx = TDX(client_id, client_secret)
+    #u_latitude = "23.70393"
+    #u_longitude = "120.42887"
+    #u_latitude = "24.10887"
+    #u_longitude =  "120.62545"
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+u_longitude+"/"
+    LocationY = "LocationY/"+u_latitude
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    for i in response :
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
