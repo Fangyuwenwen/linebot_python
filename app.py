@@ -635,13 +635,34 @@ def get_location(event):
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
+        if i["CarParkings"]["CarParkingList"] == []:
+            CarParkings.append("附近沒有查到停車場資料")
+        else :
+            CarParkings.append(i["CarParkings"]["CarParkingList"])
+        if i["ScenicSpots"]["ScenicSpotList"] == []:
+            ScenicSpots.append("附近沒有查到觀光景點的資料") 
+        else :
+            ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        if i["Hotels"]["HotelList"] == []:
+            Hotels.append("附近沒有查到住宿的資料")
+        else :
+            Hotels.append(i["Hotels"]["HotelList"])
+        if i["Restaurants"]["RestaurantList"] == []:
+            Restaurants.append("附近沒有查到餐廳的資料")
+        else :
+            Restaurants.append(i["Restaurants"]["RestaurantList"])
+        if i["RailStations"]["RailStationList"] == [] :
+            RailStations.append("附近沒有查到鐵路的資料")
+        else :
+            RailStations.append(i["RailStations"]["RailStationList"])
+        if i["BusStations"]["BusStationList"] == []:
+            BusStations.append("附近沒有查到公車的資料") 
+        else :
+            BusStations.append(i["BusStations"]["BusStationList"])
+        if i["BikeStations"]["BikeStationList"] == [] :
+            BikeStations.append("附近沒有查到公共腳踏車的資料") 
+        else :
+            BikeStations.append(i["BikeStations"]["BikeStationList"])
     line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '附近交通及觀光資訊一覽',
