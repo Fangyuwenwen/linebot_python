@@ -617,7 +617,7 @@ def handle_message(event):
                             )
         )
         elif message_text == "附近觀光景點資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in ScenicSpots:
                 for j in i :
@@ -631,7 +631,7 @@ def handle_message(event):
                             event.reply_token,
                             TextSendMessage(text="附近觀光景點資訊"+"\n"+mes))
         elif message_text == "附近住宿資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in Hotels:
                 for j in i :
@@ -645,7 +645,7 @@ def handle_message(event):
                             event.reply_token,
                             TextSendMessage(text="附近住宿資訊"+"\n"+mes))
         elif message_text == "附近餐廳資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in Restaurants:
                 for j in i :
@@ -659,7 +659,7 @@ def handle_message(event):
                             event.reply_token,
                             TextSendMessage(text="附近餐廳資訊"+"\n"+mes))
         elif message_text == "附近鐵路資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in RailStations:
                 for j in i :
@@ -673,7 +673,7 @@ def handle_message(event):
                             event.reply_token,
                             TextSendMessage(text="附近鐵路資訊"+"\n"+mes))
         elif message_text == "附近公車資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in BusStations:
                 for j in i :
@@ -687,7 +687,7 @@ def handle_message(event):
                             event.reply_token,
                             TextSendMessage(text="附近公車資訊"+"\n"+mes))
         elif message_text == "附近公共腳踏車資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in BikeStations:
                 for j in i :
