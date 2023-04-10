@@ -264,36 +264,6 @@ def tra_time(u_date,u_time,u_od,u_to):
     js = df.to_json(orient = 'records',force_ascii=False)
     return(js)
 
-#取得旅遊資訊
-"""def location_message(): 
-    tdx = TDX(client_id, client_secret)
-    #u_latitude = "23.70393"
-    #u_longitude = "120.42887"
-    #u_latitude = "24.10887"
-    #u_longitude =  "120.62545"
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+u_longitude+"/"
-    LocationY = "LocationY/"+u_latitude
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    CarParkings = []
-    ScenicSpots = []
-    Hotels = []
-    Restaurants = []
-    RailStations = []
-    BusStations = []
-    BikeStations = []
-    for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
-    return CarParkings,ScenicSpots,Hotels,Restaurants,RailStations,BusStations,BikeStations"""
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -327,6 +297,7 @@ def callback():
 
     return 'OK'
 
+#取得旅遊資訊
 CarParkings = []
 ScenicSpots = []
 Hotels = []
@@ -352,34 +323,6 @@ def get_location(event):
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     for i in response :
-        """if i["CarParkings"]["CarParkingList"] == []:
-            CarParkings.append("附近沒有查到停車場資料")
-        else :
-            CarParkings.append(i["CarParkings"]["CarParkingList"])
-        if i["ScenicSpots"]["ScenicSpotList"] == []:
-            ScenicSpots.append("附近沒有查到觀光景點的資料") 
-        else :
-            ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        if i["Hotels"]["HotelList"] == []:
-            Hotels.append("附近沒有查到住宿的資料")
-        else :
-            Hotels.append(i["Hotels"]["HotelList"])
-        if i["Restaurants"]["RestaurantList"] == []:
-            Restaurants.append("附近沒有查到餐廳的資料")
-        else :
-            Restaurants.append(i["Restaurants"]["RestaurantList"])
-        if i["RailStations"]["RailStationList"] == [] :
-            RailStations.append("附近沒有查到鐵路的資料")
-        else :
-            RailStations.append(i["RailStations"]["RailStationList"])
-        if i["BusStations"]["BusStationList"] == []:
-            BusStations.append("附近沒有查到公車的資料") 
-        else :
-            BusStations.append(i["BusStations"]["BusStationList"])
-        if i["BikeStations"]["BikeStationList"] == [] :
-            BikeStations.append("附近沒有查到公共腳踏車的資料") 
-        else :
-            BikeStations.append(i["BikeStations"]["BikeStationList"])"""
         CarParkings.append(i["CarParkings"]["CarParkingList"])
         ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
         Hotels.append(i["Hotels"]["HotelList"])
@@ -642,7 +585,7 @@ def handle_message(event):
                 )
             )
         elif message_text == "附近停車位資訊" :
-            mes=" "
+            mes=""
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in CarParkings:
                 for j in i :
@@ -650,7 +593,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到停車場資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -664,7 +607,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到觀光景點資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -678,7 +621,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到住宿資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -692,7 +635,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到餐廳資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -706,7 +649,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到鐵路資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -720,7 +663,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到公車資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
@@ -734,7 +677,7 @@ def handle_message(event):
                 if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="找不到相關資訊"))
+                        TextSendMessage(text="附近沒有查到公共腳踏車資料"))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
