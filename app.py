@@ -317,7 +317,7 @@ def get_location(event):
     #u_longitude =  "120.62545"
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
+    endpoint = "/Distance/1000?%24format=JSON"
     LocationX = "LocationX/"+str(u_longitude)+"/"
     LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
@@ -597,7 +597,25 @@ def handle_message(event):
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text="附近停車位資訊:"+"\n"+mes))
+                            TemplateSendMessage(
+                                alt_text = '附近停車場資料',
+                                template = CarouselTemplate(
+                                    columns = [
+                                        CarouselColumn(
+                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            title = '停車場資料',
+                                            text = '停車場名稱:'+j['CarParkName'],
+                                            actions = [
+                                                URIAction(
+                                                    label = '詳細內容',
+                                                    uri = "https://www.google.com.tw/maps/search/"+j['CarParkName']
+                                                )
+                                            ]
+                                        )
+                                    ]
+                                )
+                            )
+        )
         elif message_text == "附近觀光景點資訊" :
             mes=" "
             #car,scen,hote,rest,rail,bus,bike=location_message()
