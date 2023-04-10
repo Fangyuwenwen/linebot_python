@@ -317,7 +317,7 @@ def get_location(event):
     #u_longitude =  "120.62545"
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/1000?%24format=JSON"
+    endpoint = "/Distance/500?%24format=JSON"
     LocationX = "LocationX/"+str(u_longitude)+"/"
     LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
