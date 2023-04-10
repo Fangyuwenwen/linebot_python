@@ -620,8 +620,8 @@ BikeStations = []
     
 @handler.add(MessageEvent, message=LocationMessage)    
 def get_location(event):
-    u_latitude = "event.message.latitude"
-    u_longitude = "event.message.longitude"
+    u_latitude = event.message.latitude
+    u_longitude = event.message.longitude
     tdx = TDX(client_id, client_secret)
     #u_latitude = "23.70393"
     #u_longitude = "120.42887"
@@ -630,8 +630,8 @@ def get_location(event):
     #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
     base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
     endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+u_longitude+"/"
-    LocationY = "LocationY/"+u_latitude
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
     url = base_url+LocationX+LocationY+endpoint
     response = tdx.get_response(url)
     for i in response :
