@@ -327,6 +327,140 @@ def callback():
 
     return 'OK'
 
+CarParkings = []
+ScenicSpots = []
+Hotels = []
+Restaurants = []
+RailStations = []
+BusStations = []
+BikeStations = []
+    
+@handler.add(MessageEvent, message=LocationMessage)    
+def get_location(event):
+    u_latitude = event.message.latitude
+    u_longitude = event.message.longitude
+    tdx = TDX(client_id, client_secret)
+    #u_latitude = "23.70393"
+    #u_longitude = "120.42887"
+    #u_latitude = "24.10887"
+    #u_longitude =  "120.62545"
+    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+    endpoint = "/Distance/500?%24format=JSON"
+    LocationX = "LocationX/"+str(u_longitude)+"/"
+    LocationY = "LocationY/"+str(u_latitude)
+    url = base_url+LocationX+LocationY+endpoint
+    response = tdx.get_response(url)
+    for i in response :
+        """if i["CarParkings"]["CarParkingList"] == []:
+            CarParkings.append("附近沒有查到停車場資料")
+        else :
+            CarParkings.append(i["CarParkings"]["CarParkingList"])
+        if i["ScenicSpots"]["ScenicSpotList"] == []:
+            ScenicSpots.append("附近沒有查到觀光景點的資料") 
+        else :
+            ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        if i["Hotels"]["HotelList"] == []:
+            Hotels.append("附近沒有查到住宿的資料")
+        else :
+            Hotels.append(i["Hotels"]["HotelList"])
+        if i["Restaurants"]["RestaurantList"] == []:
+            Restaurants.append("附近沒有查到餐廳的資料")
+        else :
+            Restaurants.append(i["Restaurants"]["RestaurantList"])
+        if i["RailStations"]["RailStationList"] == [] :
+            RailStations.append("附近沒有查到鐵路的資料")
+        else :
+            RailStations.append(i["RailStations"]["RailStationList"])
+        if i["BusStations"]["BusStationList"] == []:
+            BusStations.append("附近沒有查到公車的資料") 
+        else :
+            BusStations.append(i["BusStations"]["BusStationList"])
+        if i["BikeStations"]["BikeStationList"] == [] :
+            BikeStations.append("附近沒有查到公共腳踏車的資料") 
+        else :
+            BikeStations.append(i["BikeStations"]["BikeStationList"])"""
+        CarParkings.append(i["CarParkings"]["CarParkingList"])
+        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+        Hotels.append(i["Hotels"]["HotelList"])
+        Restaurants.append(i["Restaurants"]["RestaurantList"])
+        RailStations.append(i["RailStations"]["RailStationList"])
+        BusStations.append(i["BusStations"]["BusStationList"])
+        BikeStations.append(i["BikeStations"]["BikeStationList"])
+    line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '附近交通及觀光資訊一覽',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title="附近交通及觀光資訊一覽",
+                                text="請選擇想要查詢的資訊",
+                                actions = [
+                                    PostbackTemplateAction(
+                                    label="停車位資訊",
+                                    text="附近停車位資訊",
+                                    data="停車位資訊"
+                                    ),
+                                    PostbackTemplateAction(
+                                    label="觀光景點資訊",
+                                    text="附近觀光景點資訊",
+                                    data="觀光景點資訊"
+                                ),
+                                PostbackTemplateAction(
+                                    label="住宿資訊",
+                                    text="附近住宿資訊",
+                                    data="住宿資訊"
+                                )
+                            ]
+                        ),
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title="附近交通及觀光資訊一覽",
+                                text="請選擇想要查詢的資訊",
+                                actions=[
+                                    PostbackTemplateAction(
+                                        label="鐵路資訊",
+                                        text="附近鐵路資訊",
+                                        data="鐵路資訊"
+                                    ),
+                                    PostbackTemplateAction(
+                                        label="公車資訊",
+                                        text="附近公車資訊",
+                                        data="公車資訊"
+                                    ),
+                                    PostbackTemplateAction(
+                                        label="公共腳踏車資訊",
+                                        text="附近公共腳踏車資訊",
+                                        data="腳踏車資訊"
+                                )
+                            ]
+                        ),
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                title="附近交通及觀光資訊一覽",
+                                text="請選擇想要查詢的資訊",
+                                actions=[
+                                    PostbackTemplateAction(
+                                        label="餐廳資訊",
+                                        text="附近餐廳資訊",
+                                        data="餐廳資訊"
+                                    ),
+                                    URIAction(
+                                        label = '開啟地圖',
+                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
+                                    ),
+                                    MessageTemplateAction(
+                                        label='結束使用',
+                                        text='查詢結束'
+                                )
+                            ]
+                        )            
+                    ]
+                )
+            )
+        )
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.type == 'text':
@@ -513,7 +647,7 @@ def handle_message(event):
             for i in CarParkings:
                 for j in i :
                     mes+=j['CarParkName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -527,7 +661,7 @@ def handle_message(event):
             for i in ScenicSpots:
                 for j in i :
                     mes+=j['ScenicSpotName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -541,7 +675,7 @@ def handle_message(event):
             for i in Hotels:
                 for j in i :
                     mes+=j['HotelName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -555,7 +689,7 @@ def handle_message(event):
             for i in Restaurants:
                 for j in i :
                     mes+=j['RestaurantName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -569,7 +703,7 @@ def handle_message(event):
             for i in RailStations:
                 for j in i :
                     mes+=j['StationName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -583,7 +717,7 @@ def handle_message(event):
             for i in BusStations:
                 for j in i :
                     mes+=j['StopName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -597,7 +731,7 @@ def handle_message(event):
             for i in BikeStations:
                 for j in i :
                     mes+=j['StationName']+"\n"
-                if mes == " ":
+                if len(mes) == 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="找不到相關資訊"))
@@ -610,133 +744,6 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
 
-CarParkings = []
-ScenicSpots = []
-Hotels = []
-Restaurants = []
-RailStations = []
-BusStations = []
-BikeStations = []
-    
-@handler.add(MessageEvent, message=LocationMessage)    
-def get_location(event):
-    u_latitude = event.message.latitude
-    u_longitude = event.message.longitude
-    tdx = TDX(client_id, client_secret)
-    #u_latitude = "23.70393"
-    #u_longitude = "120.42887"
-    #u_latitude = "24.10887"
-    #u_longitude =  "120.62545"
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    for i in response :
-        if i["CarParkings"]["CarParkingList"] == []:
-            CarParkings.append("附近沒有查到停車場資料")
-        else :
-            CarParkings.append(i["CarParkings"]["CarParkingList"])
-        if i["ScenicSpots"]["ScenicSpotList"] == []:
-            ScenicSpots.append("附近沒有查到觀光景點的資料") 
-        else :
-            ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        if i["Hotels"]["HotelList"] == []:
-            Hotels.append("附近沒有查到住宿的資料")
-        else :
-            Hotels.append(i["Hotels"]["HotelList"])
-        if i["Restaurants"]["RestaurantList"] == []:
-            Restaurants.append("附近沒有查到餐廳的資料")
-        else :
-            Restaurants.append(i["Restaurants"]["RestaurantList"])
-        if i["RailStations"]["RailStationList"] == [] :
-            RailStations.append("附近沒有查到鐵路的資料")
-        else :
-            RailStations.append(i["RailStations"]["RailStationList"])
-        if i["BusStations"]["BusStationList"] == []:
-            BusStations.append("附近沒有查到公車的資料") 
-        else :
-            BusStations.append(i["BusStations"]["BusStationList"])
-        if i["BikeStations"]["BikeStationList"] == [] :
-            BikeStations.append("附近沒有查到公共腳踏車的資料") 
-        else :
-            BikeStations.append(i["BikeStations"]["BikeStationList"])
-    line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = '附近交通及觀光資訊一覽',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions = [
-                                    PostbackTemplateAction(
-                                    label="停車位資訊",
-                                    text="附近停車位資訊",
-                                    data="停車位資訊"
-                                    ),
-                                    PostbackTemplateAction(
-                                    label="觀光景點資訊",
-                                    text="附近觀光景點資訊",
-                                    data="觀光景點資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="住宿資訊",
-                                    text="附近住宿資訊",
-                                    data="住宿資訊"
-                                )
-                            ]
-                        ),
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions=[
-                                    PostbackTemplateAction(
-                                        label="鐵路資訊",
-                                        text="附近鐵路資訊",
-                                        data="鐵路資訊"
-                                    ),
-                                    PostbackTemplateAction(
-                                        label="公車資訊",
-                                        text="附近公車資訊",
-                                        data="公車資訊"
-                                    ),
-                                    PostbackTemplateAction(
-                                        label="公共腳踏車資訊",
-                                        text="附近公共腳踏車資訊",
-                                        data="腳踏車資訊"
-                                )
-                            ]
-                        ),
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions=[
-                                    PostbackTemplateAction(
-                                        label="餐廳資訊",
-                                        text="附近餐廳資訊",
-                                        data="餐廳資訊"
-                                    ),
-                                    URIAction(
-                                        label = '開啟地圖',
-                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
-                                    ),
-                                    MessageTemplateAction(
-                                        label='結束使用',
-                                        text='查詢結束'
-                                )
-                            ]
-                        )            
-                    ]
-                )
-            )
-        )
-    return u_latitude,u_longitude
 @app.route('/static/<path:path>')
 def send_static_content(path):
     return send_from_directory('static', path)
