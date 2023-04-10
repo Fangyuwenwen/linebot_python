@@ -609,6 +609,7 @@ def handle_message(event):
                                                 URIAction(
                                                     label = '詳細內容',
                                                     uri = "https://www.google.com.tw/maps/search/"
+                                                )
                                             ]
                                         )for j in i
                                     ]
