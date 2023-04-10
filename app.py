@@ -604,11 +604,11 @@ def handle_message(event):
                                         CarouselColumn(
                                             thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
                                             title = '停車場資料',
-                                            text = '停車場名稱:'+j['CarParkName'],
+                                            text = '停車場名稱:'+mes,
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"+j['CarParkName']
+                                                    uri = "https://www.google.com.tw/maps/search/"+mes
                                                 )
                                             ]
                                         )
