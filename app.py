@@ -750,6 +750,27 @@ def handle_message(event):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="附近沒有查到公車資料"))
+                elif len(mes) > 10 :
+                    line_bot_api.reply_message(
+                            event.reply_token,
+                            TemplateSendMessage(
+                                alt_text = '附近公車資料',
+                                template = CarouselTemplate(
+                                    columns = [
+                                        CarouselColumn(
+                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            title = '公車資料',
+                                            text = '公車名稱:'+j['StopName'],
+                                            actions = [
+                                                URIAction(
+                                                    label = '詳細內容',
+                                                    uri = "https://www.google.com.tw/maps/search/"
+                                                )
+                                            ]
+                                        )for j in i[:10]
+                                    ]
+                                )
+                            ))
                 else:
                     line_bot_api.reply_message(
                             event.reply_token,
