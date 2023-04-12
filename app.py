@@ -465,7 +465,7 @@ def handle_message(event):
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
                                 title = city+'目前空氣品質',
                                 text = msg,
                                 actions = [
