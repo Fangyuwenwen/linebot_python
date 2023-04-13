@@ -440,8 +440,7 @@ def handle_message(event):
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/VzKGQlk.jpg',
                                 title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
-                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName'])
-                                        +"\n"+city+"目前空氣品質"+msg,
+                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName'])+"\n"+city+"目前空氣品質"+msg,
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
