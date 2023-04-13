@@ -143,7 +143,7 @@ def city_status(city):
                 elif aqi_val>150 and aqi_val<=200: aqi_status = '對所有族群不健康'
                 elif aqi_val>200 and aqi_val<=300: aqi_status = '非常不健康'
                 else: aqi_status = '危害'
-                msg = f'空氣品質{aqi_status} \n AQI : {aqi_val} \n pm10 : {pm10} \n publishtime : {publishtime}' # 定義回傳的訊息
+                msg = f'空氣品質{aqi_status} AQI : {aqi_val} pm10 : {pm10}  publishtime : {publishtime}' # 定義回傳的訊息
                 break
         return msg    # 回傳 msg
     except:
