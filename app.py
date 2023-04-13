@@ -125,7 +125,10 @@ def city_status(city):
         if city not in city_list:
             city_list[city]=[]             # 以縣市名稱為 key，準備存入串列資料
         site = i['sitename']               # 取出鄉鎮區域名稱
-        aqi = int(i['aqi'])                # 取得 AQI 數值
+        if i['aqi']:
+            aqi = int(i['aqi'])  
+        else:
+            aqi=0                          # 取得 AQI 數值
         status = i['status']               # 取得空氣品質狀態
         pm10 = i ['pm10']
         publishtime= i['publishtime']
@@ -146,7 +149,7 @@ def city_status(city):
             break
     for i in site_list:
         if i in city:  # 如果地址裡包含鄉鎮區域名稱的 key，就直接使用對應的內容
-            msg = f'空氣品質{site_list[i]["status"]} ( AQI {site_list[i]["aqi"]} )。'
+            msg = f'空氣品質{aqi_status} \n AQI {aqi_val} \n pm10 {pm10} \n 資料發布時間 {publishtime}'
             break
     return msg    # 回傳 msg
     
