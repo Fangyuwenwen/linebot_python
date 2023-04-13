@@ -128,7 +128,9 @@ def city_status(city):
             site = i['sitename']               # 取出鄉鎮區域名稱
             aqi = int(i['aqi'])                # 取得 AQI 數值
             status = i['status']               # 取得空氣品質狀態
-            site_list[site] = {'aqi':aqi, 'status':status}  # 記錄鄉鎮區域空氣品質
+            pm10 = i['pm10']                   #取得懸浮微粒(μg\/m3)
+            publishtime = i['publishtime']     #取得資料發布時間
+            site_list[site] = {'aqi':aqi, 'pm10':pm10,'status':status ,'publishtime':publishtime }  # 記錄鄉鎮區域空氣品質
             city_list[city].append(aqi)        # 將各個縣市裡的鄉鎮區域空氣 aqi 數值，以串列方式放入縣市名稱的變數裡
         for i in city_list:
             if i in city: # 如果地址裡包含縣市名稱的 key，就直接使用對應的內容
@@ -141,11 +143,7 @@ def city_status(city):
                 elif aqi_val>150 and aqi_val<=200: aqi_status = '對所有族群不健康'
                 elif aqi_val>200 and aqi_val<=300: aqi_status = '非常不健康'
                 else: aqi_status = '危害'
-                msg = f'空氣品質{aqi_status} ( AQI {aqi_val} )。' # 定義回傳的訊息
-                break
-        for i in site_list:
-            if i in city:  # 如果地址裡包含鄉鎮區域名稱的 key，就直接使用對應的內容
-                msg = f'空氣品質{site_list[i]["status"]} ( AQI {site_list[i]["aqi"]} )。'
+                msg = f'空氣品質{aqi_status} \n AQI : {aqi_val} \n pm10 : {pm10} \n publishtime : {publishtime}' # 定義回傳的訊息
                 break
         return msg    # 回傳 msg
     except:
@@ -440,7 +438,7 @@ def handle_message(event):
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/VzKGQlk.jpg',
                                 title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
-                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName'])+"\n"+city+"目前空氣品質"+msg,
+                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
