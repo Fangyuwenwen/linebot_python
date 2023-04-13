@@ -128,9 +128,7 @@ def city_status(city):
             site = i['sitename']               # 取出鄉鎮區域名稱
             aqi = int(i['aqi'])                # 取得 AQI 數值
             status = i['status']               # 取得空氣品質狀態
-            pm10 = i['pm10']                   #取得懸浮微粒(μg\/m3)
-            publishtime = i['publishtime']     #取得資料發布時間
-            site_list[site] = {'aqi':aqi, 'pm10':pm10,'status':status ,'publishtime':publishtime }  # 記錄鄉鎮區域空氣品質
+            site_list[site] = {'aqi':aqi, 'status':status}  # 記錄鄉鎮區域空氣品質
             city_list[city].append(aqi)        # 將各個縣市裡的鄉鎮區域空氣 aqi 數值，以串列方式放入縣市名稱的變數裡
         for i in city_list:
             if i in city: # 如果地址裡包含縣市名稱的 key，就直接使用對應的內容
@@ -143,7 +141,7 @@ def city_status(city):
                 elif aqi_val>150 and aqi_val<=200: aqi_status = '對所有族群不健康'
                 elif aqi_val>200 and aqi_val<=300: aqi_status = '非常不健康'
                 else: aqi_status = '危害'
-                msg = f'空氣品質{aqi_status} AQI : {aqi_val} pm10 : {pm10}  publishtime : {publishtime}' # 定義回傳的訊息
+                msg = f'空氣品質{aqi_status} ( AQI {aqi_val} )。' # 定義回傳的訊息
                 break
         return msg    # 回傳 msg
     except:
