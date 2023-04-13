@@ -431,6 +431,7 @@ def handle_message(event):
                     TextSendMessage(text="查詢格式為: 天氣 縣市"))
             else:
                 res = get(city)
+                msg = city_status(city)
                 line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = city + '未來天氣預測',
@@ -439,7 +440,8 @@ def handle_message(event):
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/VzKGQlk.jpg',
                                 title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
-                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
+                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName'])
+                                        +"\n"+city+"目前空氣品質"+msg,
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
@@ -503,7 +505,7 @@ def handle_message(event):
                 template = CarouselTemplate(
                     columns = [
                         CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                            thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
                             title = '最新熱門新聞',
                             text = '新聞標題:'+i['title'],
                             actions = [
@@ -564,7 +566,7 @@ def handle_message(event):
                 TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
         )
                 
-        elif message_text == "停車位":
+        elif message_text == "停車位" or message_text == "觀光景點" or message_text == "旅館" or message_text == "餐廳" or message_text == "火車" or message_text == "公車" or message_text == "公共自行車":
             line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '請傳送目前位置',
