@@ -567,7 +567,7 @@ def handle_message(event):
                 TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
         )
                 
-        elif message_text == "停車位" or message_text == "觀光景點" or message_text == "旅館" or message_text == "餐廳" or message_text == "火車" or message_text == "公車" or message_text == "公共自行車":
+        elif message_text == "停車位" or message_text == "景點" or message_text == "住宿" or message_text == "餐廳" or message_text == "火車" or message_text == "公車" or message_text == "公共自行車" or message_text == "定位":
             line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '請傳送目前位置',
@@ -580,6 +580,26 @@ def handle_message(event):
                                     URIAction(
                                         label = '傳送位置',
                                         uri = 'https://line.me/R/nv/location/'
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                )
+            )
+        elif message_text == "地圖" :
+            line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '打開google地圖',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                text = "打開google地圖",
+                                actions = [
+                                    URIAction(
+                                        label = '傳送',
+                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
                                     )
                                 ]
                             )
