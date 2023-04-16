@@ -574,7 +574,7 @@ def handle_message(event):
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                thumbnail_image_url = 'https://i.imgur.com/XPOPLJS.jpg',
                                 text = "請傳送目前位置",
                                 actions = [
                                     URIAction(
@@ -594,7 +594,7 @@ def handle_message(event):
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                thumbnail_image_url = 'https://i.imgur.com/bUdxsRx.jpg',
                                 text = "打開google地圖",
                                 actions = [
                                     URIAction(
@@ -625,7 +625,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
                                             title = '停車場資料',
                                             text = '停車場名稱:'+j['CarParkName'],
                                             actions = [
@@ -647,7 +647,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
                                             title = '停車場資料',
                                             text = '停車場名稱:'+j['CarParkName'],
                                             actions = [
@@ -679,7 +679,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
                                             title = '觀光景點資料',
                                             text = '觀光景點名稱:'+j['ScenicSpotName'],
                                             actions = [
@@ -700,7 +700,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
                                             title = '觀光景點資料',
                                             text = '觀光景點名稱:'+j['ScenicSpotName'],
                                             actions = [
@@ -731,7 +731,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
                                             title = '住宿資料',
                                             text = '住宿名稱:'+j['HotelName'],
                                             actions = [
@@ -752,7 +752,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
                                             title = '住宿資料',
                                             text = '住宿名稱:'+j['HotelName'],
                                             actions = [
@@ -783,7 +783,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
                                             title = '餐廳資料',
                                             text = '餐廳名稱:'+j['RestaurantName'],
                                             actions = [
@@ -804,7 +804,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
                                             title = '餐廳資料',
                                             text = '餐廳名稱:'+j['RestaurantName'],
                                             actions = [
@@ -835,7 +835,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
                                             title = '鐵路資料',
                                             text = '鐵路名稱:'+j['StationName'],
                                             actions = [
@@ -856,7 +856,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
                                             title = '鐵路資料',
                                             text = '鐵路名稱:'+j['StationName'],
                                             actions = [
@@ -887,7 +887,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
                                             title = '公車資料',
                                             text = '公車名稱:'+j['StopName'],
                                             actions = [
@@ -908,7 +908,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
                                             title = '公車資料',
                                             text = '公車名稱:'+j['RouteName']+"\n"+"停靠站名:"+j['StopName'],
                                             actions = [
@@ -939,7 +939,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
                                             title = '公共腳踏車資料',
                                             text = '公共腳踏車名稱:'+j['StationName'],
                                             actions = [
@@ -960,7 +960,7 @@ def handle_message(event):
                                 template = CarouselTemplate(
                                     columns = [
                                         CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                            thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
                                             title = '公共腳踏車資料',
                                             text = '公共腳踏車名稱:'+j['StationName'],
                                             actions = [
