@@ -266,6 +266,31 @@ def tra_time(u_date,u_time,u_od,u_to):
     js = df.to_json(orient = 'records',force_ascii=False)
     return(js)
 
+#取得字典
+def trans(word):
+    url="https://tw.dictionary.search.yahoo.com/search?p="+word
+    r = requests.get(url)
+    web_content = r.text
+    soup = BeautifulSoup(web_content,'lxml')
+    w_mid = []
+    w_trs = []
+    title = soup.find(class_="fz-24 fw-500 c-black lh-24")
+    #print(title.text)
+    for mid in soup.find_all(class_="pos_button fz-14 fl-l mr-12"):
+        w_mid.append(mid.text)
+        #print(mid.text)
+    for trs in soup.find_all(class_ ="fz-16 fl-l dictionaryExplanation"):
+        w_trs.append(trs.text)
+        #print(trs.text)
+    df = pd.DataFrame(
+    {
+        'w_mid': w_mid,
+        'w_trs': w_trs
+    })
+    js = df.to_json(orient = 'records',force_ascii=False)
+    return(title,js)
+
+
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -889,7 +914,7 @@ def handle_message(event):
                                         CarouselColumn(
                                             thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
                                             title = '公車資料',
-                                            text = '公車名稱:'+j['StopName'],
+                                            text = '公車名稱:'+j['StopName']+"停靠站名:"+j['StopName'],
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
@@ -973,6 +998,34 @@ def handle_message(event):
                                     ]
                                 )
                             ))
+        elif message_text[:4] == "英漢字典":
+            msg = ""
+            if str(message_text[6:]).isalpha() :
+                line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="查詢格式為:英漢字典 apple"))
+            else:
+                word = message_text[6:]
+                u_title,msg = trans(word)
+                line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '英漢字典',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
+                                title = '查詢單字: '+u_title,
+                                text = i['mid']+i['trs']+"\n",
+                                actions = [
+                                    URIAction(
+                                        label = '詳細內容',
+                                        uri = 'https://tw.dictionary.search.yahoo.com/'
+                                    )
+                                ]
+                            )for i in msg
+                        ]
+                    )
+                ))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
