@@ -290,6 +290,34 @@ def trans(word):
     js = df.to_json(orient = 'records',force_ascii=False)
     return(title,js)
 
+#讀取中油油價
+def oil_price():
+    url = "https://www.cpc.com.tw/historyprice.aspx?n=2890"
+    resp = requests.get(url)
+    m = re.search("var pieSeries = (.*);", resp.text)
+    jsonstr = m.group(0).strip('var pieSeries = ').strip(";")
+    j = json.loads(jsonstr)
+    up_data = []
+    oil92_data = []
+    oil95_data = []
+    oil98_data = []
+    oilsuper_date = []
+    for item in j[:7]:
+        up_data.append(item['name'])
+        for data in item['data']:
+            oilsuper_date.append(data['name'] + ":" + str(data['y']))
+    for item in j[7:14]:
+        for data in item['data']:
+            oil98_data.append(data['name'] + ":" + str(data['y']))
+    for item in j[14:21]:
+        for data in item['data']:
+            oil95_data.append(data['name'] + ":" + str(data['y']))
+    for item in j[21:28]:
+        for data in item['data']:
+            oil92_data.append(data['name'] + ":" + str(data['y']))
+    for i,j,k,l,m in zip(up_data,oil92_data,oil95_data,oil98_data,oilsuper_date):
+        print(i+" "+j+" "+k+" "+l+" "+m)    
+    return up_data,oil92_data,oil95_data,oil95_data,oil98_data,oilsuper_date
 
 # function for create tmp dir for download content
 def make_static_tmp_dir():
