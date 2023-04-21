@@ -1047,7 +1047,16 @@ def application(environ, start_response):
 
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
+        if not isinstance(event, MessageEvent):
+            continue
+        if not isinstance(event.message, TextMessage):
+            continue
         handle_message(event)
+    for event in events:
+        if not isinstance(event, MessageEvent):
+            continue
+        if not isinstance(event.message, LocationMessage):
+            continue
         get_location(event)
 
     start_response('200 OK', [])
