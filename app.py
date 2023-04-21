@@ -51,10 +51,13 @@ client_id = '11061108-00b12e58-30cf-432d'
 client_secret = 'fac2feb7-d9a9-4389-be90-b71c4c69671f'
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
+line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('a105bd4fb3f32aa8cdf3c7fd76c44c4a')
+
+#app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 
 # get channel_secret and channel_access_token from your environment variable
-channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+"""channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 if channel_secret is None or channel_access_token is None:
     print('Specify LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variables.')
@@ -63,7 +66,7 @@ if channel_secret is None or channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')"""
 
 #tdx會員登入
 class TDX():
@@ -1058,9 +1061,9 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
 #@app.route('/static/<path:path>')
-@app.route('/')
+"""@app.route("/callback", methods=['POST'])
 def send_static_content(path):
-    return send_from_directory('static', path)
+    return send_from_directory('static', path)"""
 
 
 if __name__ == "__main__":
