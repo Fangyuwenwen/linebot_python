@@ -89,7 +89,6 @@ class TDX():
         response = requests.get(url, headers=headers)
         return response.json()
 
-
 #取得溫度和濕度
 TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
 response = TS.read()
