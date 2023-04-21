@@ -19,7 +19,7 @@ from flask import Flask, request, abort
 
 from builtins import bytes
 from linebot import (
-    LineBotApi, WebhookHandler
+    LineBotApi, WebhookParser
 )
 from linebot.exceptions import (
     LineBotApiError, InvalidSignatureError
@@ -51,7 +51,7 @@ if channel_secret is None or channel_access_token is None:
     sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
+parser = WebhookParser(channel_secret)
 
 #thingspeak
 READ_API_KEY='O0TENR74YMQ8ORIT'
@@ -314,39 +314,6 @@ def oil_price():
         print(i+" "+j+" "+k+" "+l+" "+m)    
     return up_data,oil92_data,oil95_data,oil95_data,oil98_data,oilsuper_date
 
-# function for create tmp dir for download content
-def make_static_tmp_dir():
-    try:
-        os.makedirs(static_tmp_path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
-            pass
-        else:
-            raise
-
-
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except LineBotApiError as e:
-        print("Got exception from LINE Messaging API: %s\n" % e.message)
-        for m in e.error.details:
-            print("  %s: %s" % (m.property, m.message))
-        print("\n")
-    except InvalidSignatureError:
-        abort(400)
-
-    return 'OK'
-
 #取得旅遊資訊
 CarParkings = []
 ScenicSpots = []
@@ -355,8 +322,7 @@ Restaurants = []
 RailStations = []
 BusStations = []
 BikeStations = []
-    
-@handler.add(MessageEvent, message=LocationMessage)    
+       
 def get_location(event):
     u_latitude = event.message.latitude
     u_longitude = event.message.longitude
@@ -454,7 +420,6 @@ def get_location(event):
             )
         )
 
-@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.type == 'text':
         message_text = event.message.text
@@ -1054,6 +1019,40 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
 
+def application(environ, start_response):
+    # check request path
+    if environ['PATH_INFO'] != '/callback':
+        start_response('404 Not Found', [])
+        return create_body('Not Found')
+
+    # check request method
+    if environ['REQUEST_METHOD'] != 'POST':
+        start_response('405 Method Not Allowed', [])
+        return create_body('Method Not Allowed')
+
+    # get X-Line-Signature header value
+    signature = environ['HTTP_X_LINE_SIGNATURE']
+
+    # get request body as text
+    wsgi_input = environ['wsgi.input']
+    content_length = int(environ['CONTENT_LENGTH'])
+    body = wsgi_input.read(content_length).decode('utf-8')
+
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        start_response('400 Bad Request', [])
+        return create_body('Bad Request')
+
+    # if event is MessageEvent and message is TextMessage, then echo text
+    for event in events:
+        handle_message(event)
+
+    start_response('200 OK', [])
+    return create_body('OK')
+
+
 def create_body(text):
     if PY3:
         return [bytes(text, 'utf-8')]
@@ -1067,5 +1066,5 @@ if __name__ == '__main__':
     arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
     options = arg_parser.parse_args()
 
-    httpd = wsgiref.simple_server.make_server('', options.port, handle_message)
+    httpd = wsgiref.simple_server.make_server('', options.port, application)
     httpd.serve_forever()
