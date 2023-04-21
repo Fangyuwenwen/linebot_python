@@ -11,7 +11,7 @@ gspread
 google_auth_oauthlib
 future
 flask
-dateutil
+python-dateutil
 click
 charset_normalizer
 certifi
