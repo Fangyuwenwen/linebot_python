@@ -1,24 +1,23 @@
 import requests
 import statistics
-import time
-import datetime
 import errno
 import json
 import os
 import sys
-import tempfile
 import requests 
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+import wsgiref.simple_server
+from argparse import ArgumentParser
 
 from urllib.request import urlopen
 from argparse import ArgumentParser
 
 
-from flask import Flask, request, abort, send_from_directory
-from werkzeug.middleware.proxy_fix import ProxyFix
+from flask import Flask, request, abort
 
+from builtins import bytes
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -42,22 +41,10 @@ from linebot.models import (
     SeparatorComponent, QuickReply, QuickReplyButton,
     ImageSendMessage,PostbackTemplateAction)
 
-#thingspeak
-READ_API_KEY='O0TENR74YMQ8ORIT'
-CHANNEL_ID='1886703'
-
-#tdx
-client_id = '11061108-00b12e58-30cf-432d'
-client_secret = 'fac2feb7-d9a9-4389-be90-b71c4c69671f'
-
-app = Flask(__name__)
-line_bot_api = LineBotApi('4kW19F7L5Yt+DKSvppThCuirviV8iyqGcEYrg8aM2NjaDNl4zyA5fsFebqJusjAEb5CLVAD/dC7eDl3m7E64ByD6qOoUB0h+jyFRZkfq5tZ+gBxdd/adTJri+vdiikYKn9J58RLux6L14oElp7BBRwdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('a105bd4fb3f32aa8cdf3c7fd76c44c4a')
-
-#app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
+from linebot.utils import PY3
 
 # get channel_secret and channel_access_token from your environment variable
-"""channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 if channel_secret is None or channel_access_token is None:
     print('Specify LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variables.')
@@ -66,7 +53,13 @@ if channel_secret is None or channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')"""
+#thingspeak
+READ_API_KEY='O0TENR74YMQ8ORIT'
+CHANNEL_ID='1886703'
+
+#tdx
+client_id = '11061108-00b12e58-30cf-432d'
+client_secret = 'fac2feb7-d9a9-4389-be90-b71c4c69671f'
 
 #tdx會員登入
 class TDX():
@@ -1060,21 +1053,19 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text='請輸入正確關鍵字'))
-#@app.route('/static/<path:path>')
-"""@app.route("/callback", methods=['POST'])
-def send_static_content(path):
-    return send_from_directory('static', path)"""
 
+def create_body(text):
+    if PY3:
+        return [bytes(text, 'utf-8')]
+    else:
+        return text
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = ArgumentParser(
         usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
     )
     arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=True, help='debug')
     options = arg_parser.parse_args()
 
-    # create tmp dir for download content
-    make_static_tmp_dir()
-    
-    app.run(debug=options.debug, port=options.port)
+    httpd = wsgiref.simple_server.make_server('', options.port, handle_message)
+    httpd.serve_forever()
