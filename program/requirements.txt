@@ -4,7 +4,7 @@ pandas
 numpy
 lxml
 markupsafe
-jinja
+jinja2
 itsdangerous
 itsdangerous
 gspread
