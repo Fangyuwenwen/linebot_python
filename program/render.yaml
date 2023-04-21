@@ -4,7 +4,7 @@ services:
   env: python
   repo: https://github.com/Fangyuwenwen/linebot_python.git
   buildCommand: pip install gunicorn -r requirements.txt
-  startCommand: python thing_1.py
+  startCommand: python app.py
   plan: free
   autoDeploy: false
   envVars:
