@@ -988,7 +988,7 @@ def handle_message(event):
                             ))
         elif message_text[:4] == "英漢字典":
             msg = ""
-            if str(message_text[6:]).isalpha() :
+            if not str(message_text[6:]).isalpha() :
                 line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="查詢格式為:英漢字典 apple"))
@@ -1048,6 +1048,7 @@ def application(environ, start_response):
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
         handle_message(event)
+        get_location(event)
 
     start_response('200 OK', [])
     return create_body('OK')
