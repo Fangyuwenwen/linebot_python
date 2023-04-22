@@ -297,6 +297,7 @@ def oil_price():
     oil95_data = []
     oil98_data = []
     oilsuper_date = []
+    msg=""
     for item in j[:7]:
         up_data.append(item['name'])
         for data in item['data']:
@@ -311,8 +312,9 @@ def oil_price():
         for data in item['data']:
             oil92_data.append(data['name'] + ":" + str(data['y']))
     for i,j,k,l,m in zip(up_data,oil92_data,oil95_data,oil98_data,oilsuper_date):
-        print(i+" "+j+" "+k+" "+l+" "+m)    
-    return up_data,oil92_data,oil95_data,oil95_data,oil98_data,oilsuper_date
+        msg += "更新時間:  "+i+"\n"+j+"  "+k+"  "+l+"  "+m+"\n"
+        #print(i+" "+j+" "+k+" "+l+" "+m)    
+    return msg
 
 #取得旅遊資訊
 CarParkings = []
@@ -1002,7 +1004,7 @@ def handle_message(event):
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
+                                thumbnail_image_url = 'https://i.imgur.com/3qq5Glz.jpg',
                                 title = '查詢單字:  '+word,
                                 text = i['w_mid']+i['w_trs']+"\n",
                                 actions = [
@@ -1015,6 +1017,11 @@ def handle_message(event):
                         ]
                     )
                 ))
+        elif message_text == "中油油價" or message_text == "中油" or message_text == "油價":
+            msg = oil_price()
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text = msg))
         else:
             line_bot_api.reply_message(
                 event.reply_token,
