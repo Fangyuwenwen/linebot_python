@@ -995,6 +995,7 @@ def handle_message(event):
             else:
                 word = message_text[5:]
                 msg = trans(word)
+                item = json.loads(msg)
                 line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '英漢字典',
@@ -1010,7 +1011,7 @@ def handle_message(event):
                                         uri = 'https://tw.dictionary.search.yahoo.com/'
                                     )
                                 ]
-                            )for i in msg
+                            )for i in item
                         ]
                     )
                 ))
