@@ -1004,7 +1004,7 @@ def handle_message(event):
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
                                 title = '查詢單字:  '+word,
-                                text = i['mid']+i['trs']+"\n",
+                                text = i['w_mid']+i['w_trs']+"\n",
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
