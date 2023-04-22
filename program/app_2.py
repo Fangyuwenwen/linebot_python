@@ -269,7 +269,7 @@ def trans(word):
     soup = BeautifulSoup(web_content,'lxml')
     w_mid = []
     w_trs = []
-    title = soup.find(class_="fz-24 fw-500 c-black lh-24")
+    #title = soup.find(class_="fz-24 fw-500 c-black lh-24")
     #print(title.text)
     for mid in soup.find_all(class_="pos_button fz-14 fl-l mr-12"):
         w_mid.append(mid.text)
@@ -283,7 +283,7 @@ def trans(word):
         'w_trs': w_trs
     })
     js = df.to_json(orient = 'records',force_ascii=False)
-    return(title,js)
+    return(js)
 
 #讀取中油油價
 def oil_price():
@@ -993,8 +993,8 @@ def handle_message(event):
                         event.reply_token,
                         TextSendMessage(text="查詢格式為:英漢字典 apple"))
             else:
-                word = message_text[6:]
-                u_title,msg = trans(word)
+                word = message_text[5:]
+                msg = trans(word)
                 line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
                     alt_text = '英漢字典',
@@ -1002,7 +1002,7 @@ def handle_message(event):
                         columns = [
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
-                                title = '查詢單字:  '+u_title,
+                                title = '查詢單字:  '+word,
                                 text = i['mid']+i['trs']+"\n",
                                 actions = [
                                     URIAction(
