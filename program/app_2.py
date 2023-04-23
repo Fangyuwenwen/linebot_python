@@ -174,17 +174,20 @@ def news():
     soup = BeautifulSoup(web_content,'lxml')
     title = soup.find_all('div', class_='XlKvRb',limit=10)
     #print(title)
-    if len(title)<60:
-        titles = [t.find('a')['aria-label'] for t in title]
-        #print(titles)
-        newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in title]
-        #print(newUrls)
-        df = pd.DataFrame(
-        {
-            'title': titles,
-            'links': newUrls
-        })
-        js = df.to_json(orient = 'records',force_ascii=False)
+    titles = [t.find('a')['aria-label'] for t in title]
+    newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in title]
+    for i in range(len(titles)):
+        #print(titles[i-1])
+        if len(titles[i-1])>60:
+            newUrls.pop(titles.index(titles[i-1]))
+            titles.remove(titles[i-1])
+    #print(newUrls)
+    df = pd.DataFrame(
+    {
+        'title': titles,
+        'links': newUrls
+    })
+    js = df.to_json(orient = 'records',force_ascii=False)
     return js
 
 #取得高鐵時刻表
