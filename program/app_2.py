@@ -682,9 +682,10 @@ def handle_message(event):
         )
         elif message_text == "附近觀光景點資訊" :
             mes=""
+            mes_url="https://www.google.com.tw/maps/search/"+mes
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in ScenicSpots:
-                for j in i :
+                for j in i : 
                     mes+=j['ScenicSpotName']+"\n"
                 if len(mes) == 0:
                     line_bot_api.reply_message(
@@ -704,7 +705,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
+                                                    uri = mes_url
                                                 )
                                             ]
                                         )for j in i[:10]
@@ -725,7 +726,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
+                                                    uri = mes_url
                                                 )
                                             ]
                                         )for j in i
@@ -908,7 +909,7 @@ def handle_message(event):
                                         CarouselColumn(
                                             thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
                                             title = '公車資料',
-                                            text = '公車名稱:'+j['StopName']+"停靠站名:"+j['StopName'],
+                                            text = '公車名稱:'+j['StopName']+"\n"+"停靠站名:"+j['StopName'],
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
