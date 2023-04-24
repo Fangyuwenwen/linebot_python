@@ -682,7 +682,6 @@ def handle_message(event):
         )
         elif message_text == "附近觀光景點資訊" :
             mes=""
-            mes_url="https://www.google.com.tw/maps/search/"+mes
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in ScenicSpots:
                 for j in i : 
@@ -705,7 +704,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = mes_url
+                                                    uri = "https://www.google.com.tw/maps/search/"+j['ScenicSpotName']
                                                 )
                                             ]
                                         )for j in i[:10]
@@ -726,7 +725,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = mes_url
+                                                    uri = "https://www.google.com.tw/maps/search/"+j['ScenicSpotName']
                                                 )
                                             ]
                                         )for j in i
