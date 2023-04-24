@@ -628,9 +628,11 @@ def handle_message(event):
             )
         elif message_text == "附近停車位資訊" :
             mes=""
+            mes_url = []
             #car,scen,hote,rest,rail,bus,bike=location_message()
             for i in CarParkings:
                 for j in i :
+                    mes_url.append("https://www.google.com.tw/maps/search/"+j['CarParkName'])
                     mes+=j['CarParkName']+"\n"
                 if len(mes) == 0:
                     line_bot_api.reply_message(
@@ -650,7 +652,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
+                                                    uri = mes_url
                                                 )
                                             ]
                                         )for j in i[:10]
