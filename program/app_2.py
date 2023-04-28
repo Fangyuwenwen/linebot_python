@@ -862,7 +862,7 @@ def handle_message(event):
                                             CarouselColumn(
                                                 thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
                                                 title = '鐵路資料',
-                                                text = '車站編號'+['StationUID']+"\n"+'車站名稱:'+j['StationName'],
+                                                text = '車站編號'+j['StationUID']+"\n"+'車站名稱:'+j['StationName'],
                                                 actions = [
                                                     URIAction(
                                                         label = '詳細內容',
@@ -883,7 +883,7 @@ def handle_message(event):
                                             CarouselColumn(
                                                 thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
                                                 title = '鐵路資料',
-                                                text = '車站編號'+['StationUID']+"\n"+'車站名稱:'+j['StationName'],
+                                                text = '車站編號'+j['StationUID']+"\n"+'車站名稱:'+j['StationName'],
                                                 actions = [
                                                     URIAction(
                                                         label = '詳細內容',
