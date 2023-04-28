@@ -652,7 +652,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = mes_url
+                                                    uri = "https://www.google.com.tw/maps/search/"
                                                 )
                                             ]
                                         )for j in i[:10]
@@ -708,7 +708,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = mes_url
+                                                    uri = "https://www.google.com.tw/maps/search/"
                                                 )
                                             ]
                                         )for j in i[:10]
@@ -729,7 +729,7 @@ def handle_message(event):
                                             actions = [
                                                 URIAction(
                                                     label = '詳細內容',
-                                                    uri = mes_url
+                                                    uri = "https://www.google.com.tw/maps/search/"
                                                 )
                                             ]
                                         )for j in i
