@@ -1064,10 +1064,14 @@ def application(environ, start_response):
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
         if not isinstance(event, MessageEvent):
-            if not isinstance(event.message, TextMessage):
-                handle_message(event)
-            if not isinstance(event.message, LocationMessage):
-                get_location(event)
+            continue
+        if not isinstance(event.message, TextMessage):
+            continue
+        handle_message(event)
+        if not isinstance(event.message, LocationMessage):
+            continue
+        get_location(event)
+
     start_response('200 OK', [])
     return create_body('OK')
 
