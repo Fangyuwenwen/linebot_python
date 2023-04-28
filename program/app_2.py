@@ -330,710 +330,712 @@ BusStations = []
 BikeStations = []
        
 def get_location(event):
-    u_latitude = event.message.latitude
-    u_longitude = event.message.longitude
-    tdx = TDX(client_id, client_secret)
-    #u_latitude = "23.70393"
-    #u_longitude = "120.42887"
-    #u_latitude = "24.10887"
-    #u_longitude =  "120.62545"
-    #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
-    base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
-    endpoint = "/Distance/500?%24format=JSON"
-    LocationX = "LocationX/"+str(u_longitude)+"/"
-    LocationY = "LocationY/"+str(u_latitude)
-    url = base_url+LocationX+LocationY+endpoint
-    response = tdx.get_response(url)
-    for i in response :
-        CarParkings.append(i["CarParkings"]["CarParkingList"])
-        ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
-        Hotels.append(i["Hotels"]["HotelList"])
-        Restaurants.append(i["Restaurants"]["RestaurantList"])
-        RailStations.append(i["RailStations"]["RailStationList"])
-        BusStations.append(i["BusStations"]["BusStationList"])
-        BikeStations.append(i["BikeStations"]["BikeStationList"])
-    line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = '附近交通及觀光資訊一覽',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions = [
-                                    PostbackTemplateAction(
-                                    label="停車位資訊",
-                                    text="附近停車位資訊",
-                                    data="停車位資訊"
+    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
+        u_latitude = event.message.latitude
+        u_longitude = event.message.longitude
+        tdx = TDX(client_id, client_secret)
+        #u_latitude = "23.70393"
+        #u_longitude = "120.42887"
+        #u_latitude = "24.10887"
+        #u_longitude =  "120.62545"
+        #url="https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/LocationX/120.62545/LocationY/24.10887/Distance/500?%24format=JSON"
+        base_url = "https://tdx.transportdata.tw/api/advanced/V3/Map/GeoLocating/Tourism/Nearby/"
+        endpoint = "/Distance/500?%24format=JSON"
+        LocationX = "LocationX/"+str(u_longitude)+"/"
+        LocationY = "LocationY/"+str(u_latitude)
+        url = base_url+LocationX+LocationY+endpoint
+        response = tdx.get_response(url)
+        for i in response :
+            CarParkings.append(i["CarParkings"]["CarParkingList"])
+            ScenicSpots.append(i["ScenicSpots"]["ScenicSpotList"])
+            Hotels.append(i["Hotels"]["HotelList"])
+            Restaurants.append(i["Restaurants"]["RestaurantList"])
+            RailStations.append(i["RailStations"]["RailStationList"])
+            BusStations.append(i["BusStations"]["BusStationList"])
+            BikeStations.append(i["BikeStations"]["BikeStationList"])
+        line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = '附近交通及觀光資訊一覽',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附近交通及觀光資訊一覽",
+                                    text="請選擇想要查詢的資訊",
+                                    actions = [
+                                        PostbackTemplateAction(
+                                        label="停車位資訊",
+                                        text="附近停車位資訊",
+                                        data="停車位資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                        label="觀光景點資訊",
+                                        text="附近觀光景點資訊",
+                                        data="觀光景點資訊"
                                     ),
                                     PostbackTemplateAction(
-                                    label="觀光景點資訊",
-                                    text="附近觀光景點資訊",
-                                    data="觀光景點資訊"
-                                ),
-                                PostbackTemplateAction(
-                                    label="住宿資訊",
-                                    text="附近住宿資訊",
-                                    data="住宿資訊"
-                                )
-                            ]
-                        ),
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions=[
-                                    PostbackTemplateAction(
-                                        label="鐵路資訊",
-                                        text="附近鐵路資訊",
-                                        data="鐵路資訊"
-                                    ),
-                                    PostbackTemplateAction(
-                                        label="公車資訊",
-                                        text="附近公車資訊",
-                                        data="公車資訊"
-                                    ),
-                                    PostbackTemplateAction(
-                                        label="公共腳踏車資訊",
-                                        text="附近公共腳踏車資訊",
-                                        data="腳踏車資訊"
-                                )
-                            ]
-                        ),
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
-                                title="附近交通及觀光資訊一覽",
-                                text="請選擇想要查詢的資訊",
-                                actions=[
-                                    PostbackTemplateAction(
-                                        label="餐廳資訊",
-                                        text="附近餐廳資訊",
-                                        data="餐廳資訊"
-                                    ),
-                                    URIAction(
-                                        label = '開啟地圖',
-                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
-                                    ),
-                                    MessageTemplateAction(
-                                        label='結束使用',
-                                        text='查詢結束'
-                                )
-                            ]
-                        )            
-                    ]
+                                        label="住宿資訊",
+                                        text="附近住宿資訊",
+                                        data="住宿資訊"
+                                    )
+                                ]
+                            ),
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附近交通及觀光資訊一覽",
+                                    text="請選擇想要查詢的資訊",
+                                    actions=[
+                                        PostbackTemplateAction(
+                                            label="鐵路資訊",
+                                            text="附近鐵路資訊",
+                                            data="鐵路資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                            label="公車資訊",
+                                            text="附近公車資訊",
+                                            data="公車資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                            label="公共腳踏車資訊",
+                                            text="附近公共腳踏車資訊",
+                                            data="腳踏車資訊"
+                                    )
+                                ]
+                            ),
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附近交通及觀光資訊一覽",
+                                    text="請選擇想要查詢的資訊",
+                                    actions=[
+                                        PostbackTemplateAction(
+                                            label="餐廳資訊",
+                                            text="附近餐廳資訊",
+                                            data="餐廳資訊"
+                                        ),
+                                        URIAction(
+                                            label = '開啟地圖',
+                                            uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
+                                        ),
+                                        MessageTemplateAction(
+                                            label='結束使用',
+                                            text='查詢結束'
+                                    )
+                                ]
+                            )            
+                        ]
+                    )
                 )
             )
-        )
 
 def handle_message(event):
-    if event.message.type == 'text':
-        message_text = event.message.text
-        if message_text == '溫度':
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=tem_value))
-        elif message_text == '濕度':
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=hum_value))
-        elif message_text == '圖表':
-            flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
-            line_bot_api.reply_message(
-                event.reply_token,
-                FlexSendMessage('圖表',flexmessage)
-            )
-        elif message_text[:2] == '天氣':
-            city = message_text[3:]
-            city = city.replace('台','臺')
-            if(not (city in cities)):
+    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
+        if event.message.type == 'text':
+            message_text = event.message.text
+            if message_text == '溫度':
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="查詢格式為: 天氣 縣市"))
-            else:
-                res = get(city)
-                msg = city_status(city)
-                line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = city + '未來天氣預測',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/VzKGQlk.jpg',
-                                title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
-                                text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
-                                actions = [
-                                    URIAction(
-                                        label = '詳細內容',
-                                        uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
-                                    )
-                                ]
-                            )for data in res
-                        ]
-                    )
-                ))
-        elif message_text[:2] == '空氣':
-            city = message_text[3:]
-            city = city.replace('台','臺')
-            if(not (city in cities)):
+                    TextSendMessage(text=tem_value))
+            elif message_text == '濕度':
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="查詢格式為: 空氣 縣市"))
-            else:
-                msg = city_status(city)
-                line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = city + '目前空氣品質',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
-                                title = city+'目前空氣品質',
-                                text = msg,
-                                actions = [
-                                    URIAction(
-                                        label = '詳細內容',
-                                        uri = 'https://airtw.epa.gov.tw/'
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                ))
-        elif message_text == '雷達':
+                    TextSendMessage(text=hum_value))
+            elif message_text == '圖表':
+                flexmessage= json.load(open('flex.json','r',encoding='utf-8'))
                 line_bot_api.reply_message(
                     event.reply_token,
-                    ImageSendMessage(original_content_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?', preview_image_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?')
-                    )
-        elif message_text == '地震':
-            msg=earth_quake()
-            #line_bot_api.push_message('你的 User ID', TextSendMessage(text='Hello World!!!'))
-            line_bot_api.push_message(
-                event.source.user_id,
-                TextSendMessage(text=msg[0])
-            )
-            line_bot_api.reply_message(
-                event.reply_token, 
-                ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
-            )
-        elif message_text == '新聞':
-            now_news=news()
-            item = json.loads(now_news)
-            line_bot_api.reply_message(
-                event.reply_token, TemplateSendMessage(
-                alt_text = '最新熱門新聞',
-                template = CarouselTemplate(
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
-                            title = '最新熱門新聞',
-                            text = '新聞標題:'+i['title'],
-                            actions = [
-                                URIAction(
-                                    label = '詳細內容',
-                                    uri = i['links']
+                    FlexSendMessage('圖表',flexmessage)
+                )
+            elif message_text[:2] == '天氣':
+                city = message_text[3:]
+                city = city.replace('台','臺')
+                if(not (city in cities)):
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="查詢格式為: 天氣 縣市"))
+                else:
+                    res = get(city)
+                    msg = city_status(city)
+                    line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = city + '未來天氣預測',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/VzKGQlk.jpg',
+                                    title = '{} ~ {}'.format(data[0]['startTime'][5:-3],data[0]['endTime'][5:-3]),
+                                    text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
+                                    actions = [
+                                        URIAction(
+                                            label = '詳細內容',
+                                            uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
+                                        )
+                                    ]
+                                )for data in res
+                            ]
+                        )
+                    ))
+            elif message_text[:2] == '空氣':
+                city = message_text[3:]
+                city = city.replace('台','臺')
+                if(not (city in cities)):
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="查詢格式為: 空氣 縣市"))
+                else:
+                    msg = city_status(city)
+                    line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = city + '目前空氣品質',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
+                                    title = city+'目前空氣品質',
+                                    text = msg,
+                                    actions = [
+                                        URIAction(
+                                            label = '詳細內容',
+                                            uri = 'https://airtw.epa.gov.tw/'
+                                        )
+                                    ]
                                 )
                             ]
-                        )for i in item
-                    ]
-                )
-            )
-        )
-        elif message_text[:2] == "高鐵":
-            station = message_text[21:]
-            if(not (station in thsr_city)):
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
-            else:
-                date = message_text[2:12]
-                time = message_text[13:18]
-                od = message_text[18:20]
-                to = message_text[21:]
-                thsr_t = thsr_time(date,time,od,to)
-                item = json.loads(thsr_t)
-                mes=" "
-                for i in item:
-                    mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
-                line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
-            )
-        elif message_text[:2] == "台鐵":
-            if(message_text[2:6]!="2023"):
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="請輸入日期、上車站、下車站 (ex.台鐵2023-03-23 08:00斗六到新左營)"))
-            else:
-                date = message_text[2:12]
-                time = message_text[13:18]
-                if(message_text[18:20] in tra_city):
-                    od = message_text[18:20]
-                    to = message_text[21:]
-                elif(message_text[18:21] in tra_city):
-                    od = message_text[18:21]
-                    to = message_text[22:]
-                elif(message_text[18:22] in tra_city):
-                    od = message_text[18:22]
-                    to = message_text[23:]
-                thsr_t = tra_time(date,time,od,to)
-                item = json.loads(thsr_t)
-                mes=" "
-                for i in item:
-                    mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
-                line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
-        )
-                
-        elif message_text == "停車位" or message_text == "景點" or message_text == "住宿" or message_text == "餐廳" or message_text == "火車" or message_text == "公車" or message_text == "公共自行車" or message_text == "定位":
-            line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = '請傳送目前位置',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/XPOPLJS.jpg',
-                                text = "請傳送目前位置",
-                                actions = [
-                                    URIAction(
-                                        label = '傳送位置',
-                                        uri = 'https://line.me/R/nv/location/'
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                )
-            )
-        elif message_text == "地圖" :
-            line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = '打開google地圖',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/bUdxsRx.jpg',
-                                text = "打開google地圖",
-                                actions = [
-                                    URIAction(
-                                        label = '傳送',
-                                        uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                )
-            )
-        elif message_text == "附近停車位資訊" :
-            mes=""
-            mes_url = []
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in CarParkings:
-                for j in i :
-                    mes_url.append("https://www.google.com.tw/maps/search/"+j['CarParkName'])
-                    mes+=j['CarParkName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到停車場資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近停車場資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
-                                            title = '停車場資料',
-                                            text = '停車場名稱:'+j['CarParkName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            )
                         )
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近停車場資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
-                                            title = '停車場資料',
-                                            text = '停車場名稱:'+j['CarParkName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            )
-        )
-        elif message_text == "附近觀光景點資訊" :
-            mes=""
-            mes_url = []
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in ScenicSpots:
-                for j in i : 
-                    mes_url.append("https://www.google.com.tw/maps/search/"+j['ScenicSpotName'])
-                    mes+=j['ScenicSpotName']+"\n"
-                if len(mes) == 0:
+                    ))
+            elif message_text == '雷達':
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text="附近沒有查到觀光景點資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近觀光景點資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
-                                            title = '觀光景點資料',
-                                            text = '觀光景點名稱:'+j['ScenicSpotName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近觀光景點資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
-                                            title = '觀光景點資料',
-                                            text = '觀光景點名稱:'+j['ScenicSpotName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text == "附近住宿資訊" :
-            mes=""
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in Hotels:
-                for j in i :
-                    mes+=j['HotelName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到住宿資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近住宿資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
-                                            title = '住宿資料',
-                                            text = '住宿名稱:'+j['HotelName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近住宿資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
-                                            title = '住宿資料',
-                                            text = '住宿名稱:'+j['HotelName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text == "附近餐廳資訊" :
-            mes=""
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in Restaurants:
-                for j in i :
-                    mes+=j['RestaurantName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到餐廳資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近餐廳資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
-                                            title = '餐廳資料',
-                                            text = '餐廳名稱:'+j['RestaurantName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近餐廳資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
-                                            title = '餐廳資料',
-                                            text = '餐廳名稱:'+j['RestaurantName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text == "附近鐵路資訊" :
-            mes=""
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in RailStations:
-                for j in i :
-                    mes+=j['StationName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到鐵路資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近鐵路資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
-                                            title = '鐵路資料',
-                                            text = '鐵路名稱:'+j['StationName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近鐵路資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
-                                            title = '鐵路資料',
-                                            text = '鐵路名稱:'+j['StationName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text == "附近公車資訊" :
-            mes=""
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in BusStations:
-                for j in i :
-                    mes+=j['StopName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到公車資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近公車資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
-                                            title = '公車資料',
-                                            text = '公車名稱:'+j['StopName']+"\n"+"停靠站名:"+j['StopName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近公車資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
-                                            title = '公車資料',
-                                            text = '公車名稱:'+j['RouteName']+"\n"+"停靠站名:"+j['StopName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text == "附近公共腳踏車資訊" :
-            mes=""
-            #car,scen,hote,rest,rail,bus,bike=location_message()
-            for i in BikeStations:
-                for j in i :
-                    mes+=j['StationName']+"\n"
-                if len(mes) == 0:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="附近沒有查到公共腳踏車資料"))
-                elif len(mes) > 10 :
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近公共腳踏車資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
-                                            title = '公共腳踏車資料',
-                                            text = '公共腳踏車名稱:'+j['StationName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i[:10]
-                                    ]
-                                )
-                            ))
-                else:
-                    line_bot_api.reply_message(
-                            event.reply_token,
-                            TemplateSendMessage(
-                                alt_text = '附近公共腳踏車資料',
-                                template = CarouselTemplate(
-                                    columns = [
-                                        CarouselColumn(
-                                            thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
-                                            title = '公共腳踏車資料',
-                                            text = '公共腳踏車名稱:'+j['StationName'],
-                                            actions = [
-                                                URIAction(
-                                                    label = '詳細內容',
-                                                    uri = "https://www.google.com.tw/maps/search/"
-                                                )
-                                            ]
-                                        )for j in i
-                                    ]
-                                )
-                            ))
-        elif message_text[:4] == "英漢字典":
-            msg = ""
-            if not str(message_text[6:]).isalpha() :
+                        ImageSendMessage(original_content_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?', preview_image_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/MSC/O-A0058-003.png?')
+                        )
+            elif message_text == '地震':
+                msg=earth_quake()
+                #line_bot_api.push_message('你的 User ID', TextSendMessage(text='Hello World!!!'))
+                line_bot_api.push_message(
+                    event.source.user_id,
+                    TextSendMessage(text=msg[0])
+                )
                 line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="查詢格式為:英漢字典 apple"))
-            else:
-                word = message_text[5:]
-                msg = trans(word)
-                item = json.loads(msg)
+                    event.reply_token, 
+                    ImageSendMessage(original_content_url=msg[1],preview_image_url=msg[1])
+                )
+            elif message_text == '新聞':
+                now_news=news()
+                item = json.loads(now_news)
                 line_bot_api.reply_message(
                     event.reply_token, TemplateSendMessage(
-                    alt_text = '英漢字典',
+                    alt_text = '最新熱門新聞',
                     template = CarouselTemplate(
                         columns = [
                             CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/3qq5Glz.jpg',
-                                title = '查詢單字:  '+word,
-                                text = i['w_mid']+i['w_trs']+"\n",
+                                thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
+                                title = '最新熱門新聞',
+                                text = '新聞標題:'+i['title'],
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
-                                        uri = 'https://tw.dictionary.search.yahoo.com/'
+                                        uri = i['links']
                                     )
                                 ]
                             )for i in item
                         ]
                     )
-                ))
-        elif message_text == "中油油價" or message_text == "中油" or message_text == "油價":
-            msg = oil_price()
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text = msg))
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text='請輸入正確關鍵字'))
+                )
+            )
+            elif message_text[:2] == "高鐵":
+                station = message_text[21:]
+                if(not (station in thsr_city)):
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="請輸入日期、時間、上車站、下車站 (ex.高鐵2023-03-23 14:00雲林到左營)"))
+                else:
+                    date = message_text[2:12]
+                    time = message_text[13:18]
+                    od = message_text[18:20]
+                    to = message_text[21:]
+                    thsr_t = thsr_time(date,time,od,to)
+                    item = json.loads(thsr_t)
+                    mes=" "
+                    for i in item:
+                        mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
+                    line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
+                )
+            elif message_text[:2] == "台鐵":
+                if(message_text[2:6]!="2023"):
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="請輸入日期、上車站、下車站 (ex.台鐵2023-03-23 08:00斗六到新左營)"))
+                else:
+                    date = message_text[2:12]
+                    time = message_text[13:18]
+                    if(message_text[18:20] in tra_city):
+                        od = message_text[18:20]
+                        to = message_text[21:]
+                    elif(message_text[18:21] in tra_city):
+                        od = message_text[18:21]
+                        to = message_text[22:]
+                    elif(message_text[18:22] in tra_city):
+                        od = message_text[18:22]
+                        to = message_text[23:]
+                    thsr_t = tra_time(date,time,od,to)
+                    item = json.loads(thsr_t)
+                    mes=" "
+                    for i in item:
+                        mes+="\n"+i["t_no"]+" "+i["OriginStop"]+" "+i["DestinationStop"]+"\n"
+                    line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
+            )
+                    
+            elif message_text == "停車位" or message_text == "景點" or message_text == "住宿" or message_text == "餐廳" or message_text == "火車" or message_text == "公車" or message_text == "公共自行車" or message_text == "定位":
+                line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = '請傳送目前位置',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/XPOPLJS.jpg',
+                                    text = "請傳送目前位置",
+                                    actions = [
+                                        URIAction(
+                                            label = '傳送位置',
+                                            uri = 'https://line.me/R/nv/location/'
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+                    )
+                )
+            elif message_text == "地圖" :
+                line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = '打開google地圖',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/bUdxsRx.jpg',
+                                    text = "打開google地圖",
+                                    actions = [
+                                        URIAction(
+                                            label = '傳送',
+                                            uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+                    )
+                )
+            elif message_text == "附近停車位資訊" :
+                mes=""
+                mes_url = []
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in CarParkings:
+                    for j in i :
+                        mes_url.append("https://www.google.com.tw/maps/search/"+j['CarParkName'])
+                        mes+=j['CarParkName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到停車場資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近停車場資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
+                                                title = '停車場資料',
+                                                text = '停車場名稱:'+j['CarParkName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                )
+                            )
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近停車場資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/7OOX4Sp.jpg',
+                                                title = '停車場資料',
+                                                text = '停車場名稱:'+j['CarParkName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                )
+            )
+            elif message_text == "附近觀光景點資訊" :
+                mes=""
+                mes_url = []
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in ScenicSpots:
+                    for j in i : 
+                        mes_url.append("https://www.google.com.tw/maps/search/"+j['ScenicSpotName'])
+                        mes+=j['ScenicSpotName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到觀光景點資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近觀光景點資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
+                                                title = '觀光景點資料',
+                                                text = '觀光景點名稱:'+j['ScenicSpotName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近觀光景點資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/n7dCKV6.jpg',
+                                                title = '觀光景點資料',
+                                                text = '觀光景點名稱:'+j['ScenicSpotName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text == "附近住宿資訊" :
+                mes=""
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in Hotels:
+                    for j in i :
+                        mes+=j['HotelName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到住宿資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近住宿資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
+                                                title = '住宿資料',
+                                                text = '住宿名稱:'+j['HotelName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近住宿資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/Ingra3v.jpg',
+                                                title = '住宿資料',
+                                                text = '住宿名稱:'+j['HotelName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text == "附近餐廳資訊" :
+                mes=""
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in Restaurants:
+                    for j in i :
+                        mes+=j['RestaurantName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到餐廳資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近餐廳資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
+                                                title = '餐廳資料',
+                                                text = '餐廳名稱:'+j['RestaurantName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近餐廳資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/uzrCrAA.jpg',
+                                                title = '餐廳資料',
+                                                text = '餐廳名稱:'+j['RestaurantName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text == "附近鐵路資訊" :
+                mes=""
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in RailStations:
+                    for j in i :
+                        mes+=j['StationName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到鐵路資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近鐵路資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
+                                                title = '鐵路資料',
+                                                text = '鐵路名稱:'+j['StationName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近鐵路資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/J5QPbM8.jpg',
+                                                title = '鐵路資料',
+                                                text = '鐵路名稱:'+j['StationName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text == "附近公車資訊" :
+                mes=""
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in BusStations:
+                    for j in i :
+                        mes+=j['StopName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到公車資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近公車資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
+                                                title = '公車資料',
+                                                text = '公車名稱:'+j['StopName']+"\n"+"停靠站名:"+j['StopName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近公車資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
+                                                title = '公車資料',
+                                                text = '公車名稱:'+j['RouteName']+"\n"+"停靠站名:"+j['StopName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text == "附近公共腳踏車資訊" :
+                mes=""
+                #car,scen,hote,rest,rail,bus,bike=location_message()
+                for i in BikeStations:
+                    for j in i :
+                        mes+=j['StationName']+"\n"
+                    if len(mes) == 0:
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="附近沒有查到公共腳踏車資料"))
+                    elif len(mes) > 10 :
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近公共腳踏車資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
+                                                title = '公共腳踏車資料',
+                                                text = '公共腳踏車名稱:'+j['StationName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i[:10]
+                                        ]
+                                    )
+                                ))
+                    else:
+                        line_bot_api.reply_message(
+                                event.reply_token,
+                                TemplateSendMessage(
+                                    alt_text = '附近公共腳踏車資料',
+                                    template = CarouselTemplate(
+                                        columns = [
+                                            CarouselColumn(
+                                                thumbnail_image_url = 'https://i.imgur.com/2lze1Ll.jpg',
+                                                title = '公共腳踏車資料',
+                                                text = '公共腳踏車名稱:'+j['StationName'],
+                                                actions = [
+                                                    URIAction(
+                                                        label = '詳細內容',
+                                                        uri = "https://www.google.com.tw/maps/search/"
+                                                    )
+                                                ]
+                                            )for j in i
+                                        ]
+                                    )
+                                ))
+            elif message_text[:4] == "英漢字典":
+                msg = ""
+                if not str(message_text[6:]).isalpha() :
+                    line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="查詢格式為:英漢字典 apple"))
+                else:
+                    word = message_text[5:]
+                    msg = trans(word)
+                    item = json.loads(msg)
+                    line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = '英漢字典',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/3qq5Glz.jpg',
+                                    title = '查詢單字:  '+word,
+                                    text = i['w_mid']+i['w_trs']+"\n",
+                                    actions = [
+                                        URIAction(
+                                            label = '詳細內容',
+                                            uri = 'https://tw.dictionary.search.yahoo.com/'
+                                        )
+                                    ]
+                                )for i in item
+                            ]
+                        )
+                    ))
+            elif message_text == "中油油價" or message_text == "中油" or message_text == "油價":
+                msg = oil_price()
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text = msg))
+            else:
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text='請輸入正確關鍵字'))
 
 def application(environ, start_response):
     # check request path
