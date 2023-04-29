@@ -316,7 +316,7 @@ def oil_price():
         for data in item['data']:
             oil92_data.append(data['name'] + ":" + str(data['y']))
     for i,j,k,l,m in zip(up_data,oil92_data,oil95_data,oil98_data,oilsuper_date):
-        msg += "更新時間:  "+i+"\n"+j+"  "+k+"  "+l+"  "+m+"\n"
+        msg += "更新時間:  "+i+"\n"+j+"\n"+k+"\n"+l+"\n"+m+"\n"
         #print(i+" "+j+" "+k+" "+l+" "+m)    
     return msg
 
