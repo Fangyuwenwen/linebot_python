@@ -173,7 +173,7 @@ def news():
     web_content = r.text
     soup = BeautifulSoup(web_content,'lxml')
     web_url = soup.find_all('div', class_='XlKvRb',limit=10)
-    title = soup.find_all('h4',class_='gPFEn',limit=5)
+    title = soup.find_all('h4',class_='gPFEn',limit=10)
     titles = [t.text for t in title]
     newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in web_url]
     for i in range(len(titles)):
