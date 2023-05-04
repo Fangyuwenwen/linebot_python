@@ -172,10 +172,10 @@ def news():
     r = requests.get(url)
     web_content = r.text
     soup = BeautifulSoup(web_content,'lxml')
-    title = soup.find_all('div', class_='XlKvRb',limit=10)
-    #print(title)
-    titles = [t.find('a')['aria-label'] for t in title]
-    newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in title]
+    web_url = soup.find_all('div', class_='XlKvRb',limit=10)
+    title = soup.find_all('h4',class_='gPFEn',limit=5)
+    titles = [t.text for t in title]
+    newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in web_url]
     for i in range(len(titles)):
         #print(titles[i-1])
         if len(titles[i-1])>60:
