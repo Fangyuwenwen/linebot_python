@@ -178,7 +178,7 @@ def news():
     newUrls = [requests.get(t.find('a')['href'].replace('.','https://news.google.com',1)).url for t in web_url]
     for i in range(len(titles)):
         #print(titles[i-1])
-        if len(titles[i-1])>60:
+        if len(titles[i-1])>55:
             newUrls.pop(titles.index(titles[i-1]))
             titles.remove(titles[i-1])
     #print(newUrls)
