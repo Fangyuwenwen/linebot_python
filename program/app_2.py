@@ -1032,6 +1032,28 @@ def handle_message(event):
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text = msg))
+            elif message_text == "巡檢測試設備":
+                msg = ""
+                line_bot_api.reply_message(
+                    event.reply_token, TemplateSendMessage(
+                    alt_text = '巡檢測試設備',
+                    template = CarouselTemplate(
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
+                                title = '俯仰油壓缸',
+                                text = '測試點: 動力站油箱,
+                                actions = [
+                                    URIAction(
+                                        label = '詳細內容',
+                                        uri = i['links']
+                                    )
+                                ]
+                            )for i in item
+                        ]
+                    )
+                )
+            )
             else:
                 line_bot_api.reply_message(
                     event.reply_token,
