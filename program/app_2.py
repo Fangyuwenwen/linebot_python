@@ -1046,10 +1046,10 @@ def handle_message(event):
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
-                                        uri = i['links']
+                                        uri = "https://tw.yahoo.com/"
                                     )
                                 ]
-                            )for i in item
+                            )
                         ]
                     )
                 )
