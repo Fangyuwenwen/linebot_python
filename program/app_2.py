@@ -1034,7 +1034,7 @@ def handle_message(event):
                     TextSendMessage(text = msg))
             elif message_text == "巡檢測試設備":
                 msg = ""
-  line_bot_api.reply_message(
+                line_bot_api.reply_message(
                         event.reply_token, TemplateSendMessage(
                         alt_text = '巡檢測試設備一覽',
                         template = CarouselTemplate(
