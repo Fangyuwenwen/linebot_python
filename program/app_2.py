@@ -1034,22 +1034,75 @@ def handle_message(event):
                     TextSendMessage(text = msg))
             elif message_text == "巡檢測試設備":
                 msg = ""
-                line_bot_api.reply_message(
-                    event.reply_token, TemplateSendMessage(
-                    alt_text = '巡檢測試設備',
-                    template = CarouselTemplate(
-                        columns = [
-                            CarouselColumn(
-                                thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
-                                title = '俯仰油壓缸',
-                                text = '測試點: 動力站油箱',
-                                actions = [
-                                    URIAction(
-                                        label = '詳細內容',
-                                        uri = "https://tw.yahoo.com/"
+  line_bot_api.reply_message(
+                        event.reply_token, TemplateSendMessage(
+                        alt_text = '巡檢測試設備一覽',
+                        template = CarouselTemplate(
+                            columns = [
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附巡檢測試設備",
+                                    text="請查詢測試點",
+                                    actions = [
+                                        PostbackTemplateAction(
+                                        label="動力站油箱",
+                                        text="動力站油箱",
+                                        data="停車位資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                        label="泵浦",
+                                        text="泵浦",
+                                        data="觀光景點資訊"
+                                    ),
+                                    PostbackTemplateAction(
+                                        label="閥塊檢查",
+                                        text="閥塊檢查",
+                                        data="住宿資訊"
                                     )
                                 ]
-                            )
+                            ),
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附近交通及觀光資訊一覽",
+                                    text="請選擇想要查詢的資訊",
+                                    actions=[
+                                        PostbackTemplateAction(
+                                            label="鐵路資訊",
+                                            text="附近鐵路資訊",
+                                            data="鐵路資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                            label="公車資訊",
+                                            text="附近公車資訊",
+                                            data="公車資訊"
+                                        ),
+                                        PostbackTemplateAction(
+                                            label="公共腳踏車資訊",
+                                            text="附近公共腳踏車資訊",
+                                            data="腳踏車資訊"
+                                    )
+                                ]
+                            ),
+                                CarouselColumn(
+                                    thumbnail_image_url = 'https://i.imgur.com/Ukpmoeh.jpg',
+                                    title="附近交通及觀光資訊一覽",
+                                    text="請選擇想要查詢的資訊",
+                                    actions=[
+                                        PostbackTemplateAction(
+                                            label="餐廳資訊",
+                                            text="附近餐廳資訊",
+                                            data="餐廳資訊"
+                                        ),
+                                        URIAction(
+                                            label = '開啟地圖',
+                                            uri = 'https://www.google.com.tw/maps/@23.546162,120.6402133,8z?hl=zh-TW'
+                                        ),
+                                        MessageTemplateAction(
+                                            label='結束使用',
+                                            text='查詢結束'
+                                    )
+                                ]
+                            )            
                         ]
                     )
                 )
