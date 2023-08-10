@@ -1042,7 +1042,7 @@ def handle_message(event):
                             CarouselColumn(
                                 thumbnail_image_url = 'https://i.imgur.com/vcLfL9y.jpg',
                                 title = '俯仰油壓缸',
-                                text = '測試點: 動力站油箱,
+                                text = '測試點: 動力站油箱',
                                 actions = [
                                     URIAction(
                                         label = '詳細內容',
