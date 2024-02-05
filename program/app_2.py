@@ -86,11 +86,11 @@ class TDX():
         return response.json()
 
 #取得溫度和濕度
-TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
-response = TS.read()
-data=json.loads(response.decode('utf-8'))
-tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
-hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
+#TS = urlopen("https://api.thingspeak.com/channels/1886703/feeds.json?api_key=O0TENR74YMQ8ORIT&results=2")
+#response = TS.read()
+#data=json.loads(response.decode('utf-8'))
+#tem_value=str(data["channel"]["field1"]+data["feeds"][1]["field1"])
+#hum_value=str(data["channel"]["field2"]+data["feeds"][1]["field2"])
 
 #取得天氣資料
 cities = ['基隆市','嘉義市','臺北市','嘉義縣','新北市','臺南市','桃園縣','高雄市','新竹市','屏東縣','新竹縣','臺東縣','苗栗縣','花蓮縣','臺中市','宜蘭縣','彰化縣','澎湖縣','南投縣','金門縣','雲林縣','連江縣']
