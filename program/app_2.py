@@ -485,12 +485,12 @@ def handle_message(event):
                     msg = city_status(city)
                     line_bot_api.reply_message(
                         event.reply_token, TemplateSendMessage(
-                        alt_text = city + '目前空氣品質',
+                        alt_text = city,
                         template = CarouselTemplate(
                             columns = [
                                 CarouselColumn(
                                     thumbnail_image_url = 'https://i.imgur.com/KBWYCgp.jpg',
-                                    title = city+'目前空氣品質',
+                                    title = city,
                                     text = msg,
                                     actions = [
                                         URIAction(
