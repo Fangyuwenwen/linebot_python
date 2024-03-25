@@ -495,7 +495,7 @@ def handle_message(event):
                                     actions = [
                                         URIAction(
                                             label = '詳細內容',
-                                            uri = 'https://airtw.epa.gov.tw/'
+                                            uri = 'https://airtw.moenv.gov.tw/'
                                         )
                                     ]
                                 )
