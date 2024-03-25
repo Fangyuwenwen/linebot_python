@@ -467,7 +467,7 @@ def handle_message(event):
                                     actions = [
                                         URIAction(
                                             label = '詳細內容',
-                                            uri = 'https://www.cwb.gov.tw/V8/C/W/County/index.html'
+                                            uri = 'https://www.cwa.gov.tw/V8/C/W/OBS_Map.html'
                                         )
                                     ]
                                 )for data in res
