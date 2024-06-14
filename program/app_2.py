@@ -935,7 +935,7 @@ def handle_message(event):
                                             CarouselColumn(
                                                 thumbnail_image_url = 'https://i.imgur.com/Ri8x6hH.jpg',
                                                 title = '公車資料',
-                                                text = '公車名稱:'+j['RouteName']+"\n"+"停靠站名:"+j['StopName'],
+                                                text = "停靠站名:"+j['StopName'],
                                                 actions = [
                                                     URIAction(
                                                         label = '詳細內容',
