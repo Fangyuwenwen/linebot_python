@@ -571,7 +571,7 @@ def handle_message(event):
                     TextSendMessage(text="車次 "+" 上車時間 "+" 下車時間 "+mes)
                 )
             elif message_text[:2] == "台鐵":
-                if(message_text[2:6]!="2023"):
+                if(message_text[2:6]!="2024"):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="請輸入日期、上車站、下車站 (ex.台鐵2023-03-23 08:00斗六到新左營)"))
