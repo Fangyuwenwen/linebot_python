@@ -645,7 +645,7 @@ def handle_message(event):
                     for j in i :
                         #mes_url.append("https://www.google.com.tw/maps/search/"+j['CarParkName'])
                         mes_url.append("https://www.google.com.tw/maps/search/")
-                        mes+=j['CarParkName']+"\n"
+                        #mes+=j['CarParkName']+"\n"
                     if len(mes) == 0:
                         line_bot_api.reply_message(
                             event.reply_token,
