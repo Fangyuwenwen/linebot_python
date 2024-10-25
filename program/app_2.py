@@ -113,7 +113,7 @@ def city_status(city):
     msg = '找不到空氣品質資訊。'
     # 2022/12 時氣象局有修改了 API 內容，將部份大小寫混合全改成小寫，因此程式碼也跟著修正
     url = 'https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=ee00f31a-b8e7-42cf-bf73-71f383609760&limit=1000&sort=ImportDate%20desc&format=JSON'
-    while url == '':
+    while url == 'https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=ee00f31a-b8e7-42cf-bf73-71f383609760&limit=1000&sort=ImportDate%20desc&format=JSON':
         try:
             a_data = requests.get(url)             # 使用 get 方法透過空氣品質指標 API 取得內容
             a_data_json = a_data.json()            # json 格式化訊息內容
