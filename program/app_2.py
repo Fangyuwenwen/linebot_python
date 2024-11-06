@@ -514,7 +514,7 @@ def handle_message(event):
             elif message_text == '雷達':
                     line_bot_api.reply_message(
                         event.reply_token,
-                        ImageSendMessage(original_content_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png', preview_image_url='https://cwbopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png')
+                        ImageSendMessage(original_content_url='https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png', preview_image_url='https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png')
                         )
             elif message_text == '地震':
                 msg=earth_quake()
